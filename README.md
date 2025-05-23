@@ -11,9 +11,8 @@ The NCPDP standard is a set of guidelines for electronic healthcare transactions
 ## Getting Started
 
 - To build the project: `./gradlew build`
-- To run the application: `./gradlew run`
 - To run tests: `./gradlew test`
 
 ## Project Structure
-- `app/src/main/java` - Main Java source code
-- `app/src/test/java` - Unit tests
+- `src/main/java` - Main Java source code
+- `src/test/java` - Unit tests
