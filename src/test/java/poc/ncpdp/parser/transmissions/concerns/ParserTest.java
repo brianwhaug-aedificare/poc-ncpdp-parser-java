@@ -13,7 +13,9 @@ import poc.ncpdp.data.transmissions.ResponseDTO;
 import poc.ncpdp.data.transmissions.ResponseHeaderDTO;
 import poc.ncpdp.parser.segments.*;
 import poc.ncpdp.parser.transmissions.Request;
+import poc.ncpdp.parser.transmissions.RequestHeader;
 import poc.ncpdp.parser.transmissions.Response;
+import poc.ncpdp.parser.transmissions.ResponseHeader;
 import poc.ncpdp.parser.transmissions.groups.TransactionGroup;
 import poc.ncpdp.parser.transmissions.groups.TransmissionGroup;
 
@@ -30,18 +32,20 @@ public class ParserTest {
         // Verify the parsed request
         assertNotNull("Request should not be null", request);
         
-        // Verify header values
-        Map<String, Object> header = request.getHeader();
-        assertEquals("610066", header.get("bin_number"));
-        assertEquals("D0", header.get("version"));
-        assertEquals("B1", header.get("transaction_code"));
-        assertEquals("1234567890", header.get("processor_control_number"));
-        assertEquals("1", header.get("transaction_count"));
-        assertEquals("01", header.get("service_provider_id_qualifier"));
-        assertEquals("4563663bbbbbbbb", header.get("service_provider_id"));
-        assertEquals("20070915", header.get("date_of_service"));
-        assertEquals("98765bbbbb", header.get("software"));
+        RequestHeader header = (RequestHeader) request.getHeader();
+        assertNotNull("Header should not be null", header);
 
+        // Verify header values
+        assertEquals("610066", header.getBinNumber());
+        assertEquals("D0", header.getVersion());
+        assertEquals("B1", header.getTransactionCode());
+        assertEquals("1234567890", header.getProcessorControlNumber());
+        assertEquals("1", header.getTransactionCount());
+        assertEquals("01", header.getServiceProviderIdQualifier());
+        assertEquals("4563663bbbbbbbb", header.getServiceProviderId());
+        assertEquals("20070915", header.getDateOfService());
+        assertEquals("98765bbbbb", header.getSoftware());
+        
         // Verify transmission structure
         assertNotNull("Transmission group should not be null", request.getTransmissionGroup());
         assertNotNull("Transaction groups should not be null", request.getTransactionGroups());
@@ -105,16 +109,17 @@ public class ParserTest {
         assertNotNull("Request should not be null", request);
         
         // Verify header values
-        Map<String, Object> header = request.getHeader();
-        assertEquals("484848", header.get("bin_number"));
-        assertEquals("D0", header.get("version"));
-        assertEquals("B1", header.get("transaction_code"));
-        assertEquals("5678901234", header.get("processor_control_number"));
-        assertEquals("1", header.get("transaction_count"));
-        assertEquals("01", header.get("service_provider_id_qualifier"));
-        assertEquals("4563663bbbbbbbb", header.get("service_provider_id"));
-        assertEquals("20070915", header.get("date_of_service"));
-        assertEquals("98765bbbbb", header.get("software"));
+        RequestHeader header = (RequestHeader) request.getHeader();
+        assertNotNull("Header should not be null", header);
+        assertEquals("484848", header.getBinNumber());
+        assertEquals("D0", header.getVersion());
+        assertEquals("B1", header.getTransactionCode());
+        assertEquals("5678901234", header.getProcessorControlNumber());
+        assertEquals("1", header.getTransactionCount());
+        assertEquals("01", header.getServiceProviderIdQualifier());
+        assertEquals("4563663bbbbbbbb", header.getServiceProviderId());
+        assertEquals("20070915", header.getDateOfService());
+        assertEquals("98765bbbbb", header.getSoftware());
 
         // Interrogate the transmission group and segments
         TransmissionGroup transmissionGroup = request.getTransmissionGroup();
@@ -156,13 +161,13 @@ public class ParserTest {
         // Verify the parsed request
         assertNotNull("Response should not be null", response);
         
-        // Verify header values
-        Map<String, Object> header = response.getHeader();
-        assertEquals("D0", header.get("version"));
-        assertEquals("B1", header.get("transaction_code"));
-        assertEquals("1", header.get("transaction_count"));
-        assertEquals("20070915", header.get("date_of_service"));
-
+        ResponseHeader header = (ResponseHeader) response.getHeader();
+        assertNotNull("Header should not be null", header);
+        assertEquals("D0", header.getVersion());
+        assertEquals("B1", header.getTransactionCode());
+        assertEquals("1", header.getTransactionCount());
+        assertEquals("20070915", header.getDateOfService());
+        
         // Interrogate the transmission group and segments
         TransmissionGroup transmissionGroup = response.getTransmissionGroup();
         List<SegmentBase> segments = transmissionGroup.getSegments();

@@ -27,7 +27,7 @@ public interface Parser {
     static Request parseRequest(String rawString) {
         RequestHeader header = new RequestHeader(rawString);
         ParseResult result = parseTransmission(rawString, header.getHeaderLength());
-        return new Request(header.getHeader(), result.transmissionGroup(),
+        return new Request(header, result.transmissionGroup(),
                 result.transactionGroups(), new ArrayList<>());
     }
 
@@ -37,7 +37,7 @@ public interface Parser {
     static Response parseResponse(String rawString) {
         ResponseHeader header = new ResponseHeader(rawString);
         ParseResult result = parseTransmission(rawString, header.getHeaderLength());
-        return new Response(header.header, result.transmissionGroup(),
+        return new Response(header, result.transmissionGroup(),
                 result.transactionGroups(), new ArrayList<>());
     }
 

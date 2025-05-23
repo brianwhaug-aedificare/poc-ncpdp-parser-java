@@ -3,12 +3,13 @@ package poc.ncpdp.parser.transmissions;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import lombok.Data;
+
 import poc.ncpdp.parser.utils.FixedWidth;
 
 @Data
-public class RequestHeader {
+public class RequestHeader implements TransmissionHeader {
+
     private static final String BIN_NUMBER = "bin_number";
     private static final String VERSION = "version";
     private static final String TRANSACTION_CODE = "transaction_code";
@@ -65,5 +66,9 @@ public class RequestHeader {
         this.serviceProviderId = (String) header.get(SERVICE_PROVIDER_ID);
         this.dateOfService = (String) header.get(DATE_OF_SERVICE);
         this.software = (String) header.get(SOFTWARE);
+    }
+
+    public Map<String, Object> getHeader() {
+        return header;
     }
 }

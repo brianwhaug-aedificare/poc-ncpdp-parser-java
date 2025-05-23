@@ -5,16 +5,15 @@ import java.util.Map;
 
 import lombok.Data;
 import poc.ncpdp.parser.utils.FixedWidth;
-
 @Data
-public class ResponseHeader {
-    public static final String VERSION = "version";
-    public static final String TRANSACTION_CODE = "transaction_code";
-    public static final String TRANSACTION_COUNT = "transaction_count";
-    public static final String HEADER_RESPONSE_STATUS = "header_response_status";
-    public static final String SERVICE_PROVIDER_ID_QUALIFIER = "service_provider_id_qualifier";
-    public static final String SERVICE_PROVIDER_ID = "service_provider_id";
-    public static final String DATE_OF_SERVICE = "date_of_service";
+public class ResponseHeader implements TransmissionHeader {
+    private static final String VERSION = "version";
+    private static final String TRANSACTION_CODE = "transaction_code";
+    private static final String TRANSACTION_COUNT = "transaction_count";
+    private static final String HEADER_RESPONSE_STATUS = "header_response_status";
+    private static final String SERVICE_PROVIDER_ID_QUALIFIER = "service_provider_id_qualifier";
+    private static final String SERVICE_PROVIDER_ID = "service_provider_id";
+    private static final String DATE_OF_SERVICE = "date_of_service";
 
     private static final Map<String, Integer> HEADER_SCHEMA = createHeaderSchema();
 
@@ -56,5 +55,9 @@ public class ResponseHeader {
         this.serviceProviderIdQualifier = (String) header.get(SERVICE_PROVIDER_ID_QUALIFIER);
         this.serviceProviderId = (String) header.get(SERVICE_PROVIDER_ID);
         this.dateOfService = (String) header.get(DATE_OF_SERVICE);
+    }
+
+    public Map<String, Object> getHeader() {
+        return header;
     }
 }
