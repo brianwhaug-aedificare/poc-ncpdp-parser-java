@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import poc.ncpdp.data.transmissions.RequestDTO;
 import poc.ncpdp.data.transmissions.RequestHeaderDTO;
