@@ -7,10 +7,13 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    id 'application'
-    id 'java'
+    id 'java-library'
 }
+
+group = 'poc.ncpdp.parser'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -45,9 +48,4 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
-}
-
-application {
-    // Define the main class for the application.
-    mainClass = 'poc.ncpdp.parser.App'
 }

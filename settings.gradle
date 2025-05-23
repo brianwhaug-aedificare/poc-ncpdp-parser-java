@@ -12,4 +12,3 @@ plugins {
 }
 
 rootProject.name = 'poc-ncpdp-parser-java'
-include('app')
