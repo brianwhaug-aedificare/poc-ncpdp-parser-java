@@ -1,6 +1,7 @@
 package poc.ncpdp.parser.segments;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.ResponsePatientDTO;
@@ -12,6 +13,11 @@ public class ResponsePatient extends SegmentBase {
     public ResponsePatient() {
         super();
         this.responsePatientDTO = new ResponsePatientDTO();
+    }
+
+    public ResponsePatient(ResponsePatientDTO responsePatientDTO) {
+        super();
+        this.responsePatientDTO = responsePatientDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -28,16 +34,33 @@ public class ResponsePatient extends SegmentBase {
         return this.responsePatientDTO;
     }
 
-    private class ResponsePatientMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromResponsePatientDTO(responsePatientDTO, values);
+        return values;
+    }
+
+    private static class ResponsePatientMapper {
+        private static final Map<String, java.util.function.BiConsumer<ResponsePatientDTO, String>> FIELD_SETTERS = Map.of(
+            "CA", ResponsePatientDTO::setPatientFirstName,
+            "CB", ResponsePatientDTO::setPatientLastName,
+            "C4", ResponsePatientDTO::setDateOfBirth
+        );
+
         public void updateResponsePatientDTOFromMap(Map<String, Object> values, ResponsePatientDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "CA": dto.setPatientFirstName(value); break;
-                    case "CB": dto.setPatientLastName(value); break;
-                    case "C4": dto.setDateOfBirth(value); break;
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<ResponsePatientDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromResponsePatientDTO(ResponsePatientDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "CA", dto.getPatientFirstName());
+            putIfNotNull(values, "CB", dto.getPatientLastName());
+            putIfNotNull(values, "C4", dto.getDateOfBirth());
         }
     }
 }

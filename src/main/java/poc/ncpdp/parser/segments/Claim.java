@@ -2,7 +2,9 @@ package poc.ncpdp.parser.segments;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import poc.ncpdp.data.segments.ClaimDTO;
 
@@ -13,6 +15,11 @@ public class Claim extends SegmentBase {
     public Claim() {
         super();
         this.claimDTO = new ClaimDTO();
+    }
+
+    public Claim(ClaimDTO claimDTO) {
+        super();
+        this.claimDTO = claimDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -68,55 +75,113 @@ public class Claim extends SegmentBase {
         return this.claimDTO;
     }
 
-    private class ClaimMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromClaimDTO(claimDTO, values);
+        return values;
+    }
+
+    private static class ClaimMapper {
+        private static final Map<String, BiConsumer<ClaimDTO, String>> FIELD_SETTERS;
+        static {
+            FIELD_SETTERS = new HashMap<>();
+            FIELD_SETTERS.put("EM", (dto, v) -> dto.setPrescriptionReferenceNumberQualifier(v));
+            FIELD_SETTERS.put("D2", (dto, v) -> dto.setPrescriptionReferenceNumber(v));
+            FIELD_SETTERS.put("E1", (dto, v) -> dto.setProductServiceIdQualifier(v));
+            FIELD_SETTERS.put("D7", (dto, v) -> dto.setProductServiceId(v));
+            FIELD_SETTERS.put("EN", (dto, v) -> dto.setAssociatedPrescriptionReferenceNumber(v));
+            FIELD_SETTERS.put("EP", (dto, v) -> dto.setAssociatedPrescriptionDate(v));
+            FIELD_SETTERS.put("SE", (dto, v) -> dto.setProcedureModifierCodeCount(v));
+            FIELD_SETTERS.put("ER", (dto, v) -> dto.setProcedureModifierCode(v));
+            FIELD_SETTERS.put("E7", (dto, v) -> dto.setQuantityDispensed(v));
+            FIELD_SETTERS.put("D3", (dto, v) -> dto.setFillNumber(v));
+            FIELD_SETTERS.put("D5", (dto, v) -> dto.setDaysSupply(v));
+            FIELD_SETTERS.put("D6", (dto, v) -> dto.setCompoundCode(v));
+            FIELD_SETTERS.put("D8", (dto, v) -> dto.setDispenseAsWrittenProductSelectionCode(v));
+            FIELD_SETTERS.put("DE", (dto, v) -> dto.setDatePrescriptionWritten(v));
+            FIELD_SETTERS.put("DF", (dto, v) -> dto.setNumberOfRefillsAuthorized(v));
+            FIELD_SETTERS.put("DJ", (dto, v) -> dto.setPrescriptionOriginCode(v));
+            FIELD_SETTERS.put("NX", (dto, v) -> dto.setSubmissionClarificationCodeCount(v));
+            FIELD_SETTERS.put("DK", (dto, v) -> dto.setSubmissionClarificationCode(v));
+            FIELD_SETTERS.put("ET", (dto, v) -> dto.setQuantityPrescribed(v));
+            FIELD_SETTERS.put("C8", (dto, v) -> dto.setOtherCoverageCode(v));
+            FIELD_SETTERS.put("DT", (dto, v) -> dto.setSpecialPackagingIndicator(v));
+            FIELD_SETTERS.put("EJ", (dto, v) -> dto.setOriginallyPrescribedIdQualifier(v));
+            FIELD_SETTERS.put("EA", (dto, v) -> dto.setOriginallyPrescribedCode(v));
+            FIELD_SETTERS.put("EB", (dto, v) -> dto.setOriginallyPrescribedQuantity(v));
+            FIELD_SETTERS.put("CW", (dto, v) -> dto.setAlternateId(v));
+            FIELD_SETTERS.put("EK", (dto, v) -> dto.setScheduledPrescriptionIdNumber(v));
+            FIELD_SETTERS.put("28", (dto, v) -> dto.setUnitOfMeasure(v));
+            FIELD_SETTERS.put("DI", (dto, v) -> dto.setLevelOfService(v));
+            FIELD_SETTERS.put("EU", (dto, v) -> dto.setPriorAuthorizationTypeCode(v));
+            FIELD_SETTERS.put("EV", (dto, v) -> dto.setPriorAuthorizationNumberSubmitted(v));
+            FIELD_SETTERS.put("EW", (dto, v) -> dto.setIntermediaryAuthorizationTypeId(v));
+            FIELD_SETTERS.put("EX", (dto, v) -> dto.setIntermediaryAuthorizationId(v));
+            FIELD_SETTERS.put("HD", (dto, v) -> dto.setDispensingStatus(v));
+            FIELD_SETTERS.put("HF", (dto, v) -> dto.setQuantityIntendedToBeDispensed(v));
+            FIELD_SETTERS.put("HG", (dto, v) -> dto.setDaysSupplyIntendedToBeDispensed(v));
+            FIELD_SETTERS.put("NV", (dto, v) -> dto.setDelayReasonCode(v));
+            FIELD_SETTERS.put("K5", (dto, v) -> dto.setTransactionReferenceNumber(v));
+            FIELD_SETTERS.put("MT", (dto, v) -> dto.setPatientAssignmentIndicator(v));
+            FIELD_SETTERS.put("E2", (dto, v) -> dto.setRouteOfAdministration(v));
+            FIELD_SETTERS.put("G1", (dto, v) -> dto.setCompoundType(v));
+            FIELD_SETTERS.put("N4", (dto, v) -> dto.setMedicadeIcn(v));
+            FIELD_SETTERS.put("U7", (dto, v) -> dto.setPharmacyServiceType(v));
+        }
+
         public void updateClaimDTOFromMap(Map<String, Object> values, ClaimDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "EM": dto.setPrescriptionReferenceNumberQualifier(value); break;
-                    case "D2": dto.setPrescriptionReferenceNumber(value); break;
-                    case "E1": dto.setProductServiceIdQualifier(value); break;
-                    case "D7": dto.setProductServiceId(value); break;
-                    case "EN": dto.setAssociatedPrescriptionReferenceNumber(value); break;
-                    case "EP": dto.setAssociatedPrescriptionDate(value); break;
-                    case "SE": dto.setProcedureModifierCodeCount(value); break;
-                    case "ER": dto.setProcedureModifierCode(value); break;
-                    case "E7": dto.setQuantityDispensed(value); break;
-                    case "D3": dto.setFillNumber(value); break;
-                    case "D5": dto.setDaysSupply(value); break;
-                    case "D6": dto.setCompoundCode(value); break;
-                    case "D8": dto.setDispenseAsWrittenProductSelectionCode(value); break;
-                    case "DE": dto.setDatePrescriptionWritten(value); break;
-                    case "DF": dto.setNumberOfRefillsAuthorized(value); break;
-                    case "DJ": dto.setPrescriptionOriginCode(value); break;
-                    case "NX": dto.setSubmissionClarificationCodeCount(value); break;
-                    case "DK": dto.setSubmissionClarificationCode(value); break;
-                    case "ET": dto.setQuantityPrescribed(value); break;
-                    case "C8": dto.setOtherCoverageCode(value); break;
-                    case "DT": dto.setSpecialPackagingIndicator(value); break;
-                    case "EJ": dto.setOriginallyPrescribedIdQualifier(value); break;
-                    case "EA": dto.setOriginallyPrescribedCode(value); break;
-                    case "EB": dto.setOriginallyPrescribedQuantity(value); break;
-                    case "CW": dto.setAlternateId(value); break;
-                    case "EK": dto.setScheduledPrescriptionIdNumber(value); break;
-                    case "28": dto.setUnitOfMeasure(value); break;
-                    case "DI": dto.setLevelOfService(value); break;
-                    case "EU": dto.setPriorAuthorizationTypeCode(value); break;
-                    case "EV": dto.setPriorAuthorizationNumberSubmitted(value); break;
-                    case "EW": dto.setIntermediaryAuthorizationTypeId(value); break;
-                    case "EX": dto.setIntermediaryAuthorizationId(value); break;
-                    case "HD": dto.setDispensingStatus(value); break;
-                    case "HF": dto.setQuantityIntendedToBeDispensed(value); break;
-                    case "HG": dto.setDaysSupplyIntendedToBeDispensed(value); break;
-                    case "NV": dto.setDelayReasonCode(value); break;
-                    case "K5": dto.setTransactionReferenceNumber(value); break;
-                    case "MT": dto.setPatientAssignmentIndicator(value); break;
-                    case "E2": dto.setRouteOfAdministration(value); break;
-                    case "G1": dto.setCompoundType(value); break;
-                    case "N4": dto.setMedicadeIcn(value); break;
-                    case "U7": dto.setPharmacyServiceType(value); break;
+            values.forEach((key, value) -> {
+                BiConsumer<ClaimDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromClaimDTO(ClaimDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "EM", dto.getPrescriptionReferenceNumberQualifier());
+            putIfNotNull(values, "D2", dto.getPrescriptionReferenceNumber());
+            putIfNotNull(values, "E1", dto.getProductServiceIdQualifier());
+            putIfNotNull(values, "D7", dto.getProductServiceId());
+            putIfNotNull(values, "EN", dto.getAssociatedPrescriptionReferenceNumber());
+            putIfNotNull(values, "EP", dto.getAssociatedPrescriptionDate());
+            putIfNotNull(values, "SE", dto.getProcedureModifierCodeCount());
+            putIfNotNull(values, "ER", dto.getProcedureModifierCode());
+            putIfNotNull(values, "E7", dto.getQuantityDispensed());
+            putIfNotNull(values, "D3", dto.getFillNumber());
+            putIfNotNull(values, "D5", dto.getDaysSupply());
+            putIfNotNull(values, "D6", dto.getCompoundCode());
+            putIfNotNull(values, "D8", dto.getDispenseAsWrittenProductSelectionCode());
+            putIfNotNull(values, "DE", dto.getDatePrescriptionWritten());
+            putIfNotNull(values, "DF", dto.getNumberOfRefillsAuthorized());
+            putIfNotNull(values, "DJ", dto.getPrescriptionOriginCode());
+            putIfNotNull(values, "NX", dto.getSubmissionClarificationCodeCount());
+            putIfNotNull(values, "DK", dto.getSubmissionClarificationCode());
+            putIfNotNull(values, "ET", dto.getQuantityPrescribed());
+            putIfNotNull(values, "C8", dto.getOtherCoverageCode());
+            putIfNotNull(values, "DT", dto.getSpecialPackagingIndicator());
+            putIfNotNull(values, "EJ", dto.getOriginallyPrescribedIdQualifier());
+            putIfNotNull(values, "EA", dto.getOriginallyPrescribedCode());
+            putIfNotNull(values, "EB", dto.getOriginallyPrescribedQuantity());
+            putIfNotNull(values, "CW", dto.getAlternateId());
+            putIfNotNull(values, "EK", dto.getScheduledPrescriptionIdNumber());
+            putIfNotNull(values, "28", dto.getUnitOfMeasure());
+            putIfNotNull(values, "DI", dto.getLevelOfService());
+            putIfNotNull(values, "EU", dto.getPriorAuthorizationTypeCode());
+            putIfNotNull(values, "EV", dto.getPriorAuthorizationNumberSubmitted());
+            putIfNotNull(values, "EW", dto.getIntermediaryAuthorizationTypeId());
+            putIfNotNull(values, "EX", dto.getIntermediaryAuthorizationId());
+            putIfNotNull(values, "HD", dto.getDispensingStatus());
+            putIfNotNull(values, "HF", dto.getQuantityIntendedToBeDispensed());
+            putIfNotNull(values, "HG", dto.getDaysSupplyIntendedToBeDispensed());
+            putIfNotNull(values, "NV", dto.getDelayReasonCode());
+            putIfNotNull(values, "K5", dto.getTransactionReferenceNumber());
+            putIfNotNull(values, "MT", dto.getPatientAssignmentIndicator());
+            putIfNotNull(values, "E2", dto.getRouteOfAdministration());
+            putIfNotNull(values, "G1", dto.getCompoundType());
+            putIfNotNull(values, "N4", dto.getMedicadeIcn());
+            putIfNotNull(values, "U7", dto.getPharmacyServiceType());
         }
     }
 }

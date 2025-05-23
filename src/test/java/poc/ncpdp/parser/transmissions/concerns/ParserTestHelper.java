@@ -29,6 +29,10 @@ public class ParserTestHelper {
         }
     }
 
+    public static String produceTestFile(String content) throws IOException {
+        return addSpecialCharacters(content);
+    }
+
     public static boolean isAscii(String input) {
         return StandardCharsets.US_ASCII.newEncoder().canEncode(input);
     }
@@ -53,5 +57,13 @@ public class ParserTestHelper {
             .replaceAll(Pattern.quote("<1D>"), "\u001D") // Group Separator
             .replaceAll(Pattern.quote("<1C>"), "\u001C") // Field Separator
             .replaceAll("Ø", "0");                   // Convert Ø to 0
+    }
+
+    private static String addSpecialCharacters(String content) {
+        return content
+            .replaceAll(Pattern.quote("\u001E"), "<1E>") // Record Separator
+            .replaceAll(Pattern.quote("\u001D"), "<1D>") // Group Separator
+            .replaceAll(Pattern.quote("\u001C"), "<1C>") // Field Separator
+            .replaceAll("0", "Ø");                   // Convert 0 to Ø
     }
 }

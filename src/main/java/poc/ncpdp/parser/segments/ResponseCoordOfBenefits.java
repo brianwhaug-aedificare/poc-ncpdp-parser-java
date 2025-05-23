@@ -1,6 +1,7 @@
 package poc.ncpdp.parser.segments;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.ResponseCoordOfBenefitsDTO;
@@ -12,6 +13,11 @@ public class ResponseCoordOfBenefits extends SegmentBase {
     public ResponseCoordOfBenefits() {
         super();
         this.responseCoordOfBenefitsDTO = new ResponseCoordOfBenefitsDTO();
+    }
+
+    public ResponseCoordOfBenefits(ResponseCoordOfBenefitsDTO responseCoordOfBenefitsDTO) {
+        super();
+        this.responseCoordOfBenefitsDTO = responseCoordOfBenefitsDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -37,25 +43,53 @@ public class ResponseCoordOfBenefits extends SegmentBase {
         return this.responseCoordOfBenefitsDTO;
     }
 
-    private class ResponseCoordOfBenefitsMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromResponseCoordOfBenefitsDTO(responseCoordOfBenefitsDTO, values);
+        return values;
+    }
+
+    private static class ResponseCoordOfBenefitsMapper {
+        private static final java.util.Map<String, java.util.function.BiConsumer<ResponseCoordOfBenefitsDTO, String>> FIELD_SETTERS;
+        static {
+            FIELD_SETTERS = new java.util.HashMap<>();
+            FIELD_SETTERS.put("NT", ResponseCoordOfBenefitsDTO::setOtherPayerIdCount);
+            FIELD_SETTERS.put("5C", ResponseCoordOfBenefitsDTO::setOtherPayerCoverageType);
+            FIELD_SETTERS.put("6C", ResponseCoordOfBenefitsDTO::setOtherPayerIdQualifier);
+            FIELD_SETTERS.put("7C", ResponseCoordOfBenefitsDTO::setOtherPayerId);
+            FIELD_SETTERS.put("MH", ResponseCoordOfBenefitsDTO::setOtherPayerProcessorControlNumber);
+            FIELD_SETTERS.put("NU", ResponseCoordOfBenefitsDTO::setOtherPayerCardholderId);
+            FIELD_SETTERS.put("MJ", ResponseCoordOfBenefitsDTO::setOtherPayerGroupId);
+            FIELD_SETTERS.put("UV", ResponseCoordOfBenefitsDTO::setOtherPayerPersonCode);
+            FIELD_SETTERS.put("UB", ResponseCoordOfBenefitsDTO::setOtherPayerHelpDeskPhoneNumber);
+            FIELD_SETTERS.put("UW", ResponseCoordOfBenefitsDTO::setOtherPayerPatientRelationshipCode);
+            FIELD_SETTERS.put("UX", ResponseCoordOfBenefitsDTO::setOtherPayerBenefitEffectiveDate);
+            FIELD_SETTERS.put("UY", ResponseCoordOfBenefitsDTO::setOtherPayerBenefitTerminationDate);
+        }
+
         public void updateResponseCoordOfBenefitsDTOFromMap(Map<String, Object> values, ResponseCoordOfBenefitsDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "NT": dto.setOtherPayerIdCount(value); break;
-                    case "5C": dto.setOtherPayerCoverageType(value); break;
-                    case "6C": dto.setOtherPayerIdQualifier(value); break;
-                    case "7C": dto.setOtherPayerId(value); break;
-                    case "MH": dto.setOtherPayerProcessorControlNumber(value); break;
-                    case "NU": dto.setOtherPayerCardholderId(value); break;
-                    case "MJ": dto.setOtherPayerGroupId(value); break;
-                    case "UV": dto.setOtherPayerPersonCode(value); break;
-                    case "UB": dto.setOtherPayerHelpDeskPhoneNumber(value); break;
-                    case "UW": dto.setOtherPayerPatientRelationshipCode(value); break;
-                    case "UX": dto.setOtherPayerBenefitEffectiveDate(value); break;
-                    case "UY": dto.setOtherPayerBenefitTerminationDate(value); break;
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<ResponseCoordOfBenefitsDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromResponseCoordOfBenefitsDTO(ResponseCoordOfBenefitsDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "NT", dto.getOtherPayerIdCount());
+            putIfNotNull(values, "5C", dto.getOtherPayerCoverageType());
+            putIfNotNull(values, "6C", dto.getOtherPayerIdQualifier());
+            putIfNotNull(values, "7C", dto.getOtherPayerId());
+            putIfNotNull(values, "MH", dto.getOtherPayerProcessorControlNumber());
+            putIfNotNull(values, "NU", dto.getOtherPayerCardholderId());
+            putIfNotNull(values, "MJ", dto.getOtherPayerGroupId());
+            putIfNotNull(values, "UV", dto.getOtherPayerPersonCode());
+            putIfNotNull(values, "UB", dto.getOtherPayerHelpDeskPhoneNumber());
+            putIfNotNull(values, "UW", dto.getOtherPayerPatientRelationshipCode());
+            putIfNotNull(values, "UX", dto.getOtherPayerBenefitEffectiveDate());
+            putIfNotNull(values, "UY", dto.getOtherPayerBenefitTerminationDate());
         }
     }
 }

@@ -1,6 +1,7 @@
 package poc.ncpdp.parser.segments;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.ResponseDurPpsDTO;
@@ -12,6 +13,11 @@ public class ResponseDurPps extends SegmentBase {
     public ResponseDurPps() {
         super();
         this.responseDurPpsDTO = new ResponseDurPpsDTO();
+    }
+
+    public ResponseDurPps(ResponseDurPpsDTO responseDurPpsDTO) {
+        super();
+        this.responseDurPpsDTO = responseDurPpsDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -35,23 +41,47 @@ public class ResponseDurPps extends SegmentBase {
         return this.responseDurPpsDTO;
     }
 
-    private class ResponseDurPpsMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromResponseDurPpsDTO(responseDurPpsDTO, values);
+        return values;
+    }
+
+    private static class ResponseDurPpsMapper {
+        private static final Map<String, java.util.function.BiConsumer<ResponseDurPpsDTO, String>> FIELD_SETTERS = Map.of(
+            "J6", ResponseDurPpsDTO::setDurPpsResponseCodeCounter,
+            "E4", ResponseDurPpsDTO::setReasonForServiceCode,
+            "FS", ResponseDurPpsDTO::setClinicalSignificanceCode,
+            "FT", ResponseDurPpsDTO::setOtherPharmacyIndicator,
+            "FV", ResponseDurPpsDTO::setQuantityOfPreviousFill,
+            "FU", ResponseDurPpsDTO::setPreviousDateOfFill,
+            "FW", ResponseDurPpsDTO::setDatabaseIndicator,
+            "FX", ResponseDurPpsDTO::setOtherPrescriberIndicator,
+            "FY", ResponseDurPpsDTO::setDurFreeTextMessage,
+            "NS", ResponseDurPpsDTO::setDurAdditionalText
+        );
+
         public void updateResponseDurPpsDTOFromMap(Map<String, Object> values, ResponseDurPpsDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "J6": dto.setDurPpsResponseCodeCounter(value); break;
-                    case "E4": dto.setReasonForServiceCode(value); break;
-                    case "FS": dto.setClinicalSignificanceCode(value); break;
-                    case "FT": dto.setOtherPharmacyIndicator(value); break;
-                    case "FV": dto.setQuantityOfPreviousFill(value); break;
-                    case "FU": dto.setPreviousDateOfFill(value); break;
-                    case "FW": dto.setDatabaseIndicator(value); break;
-                    case "FX": dto.setOtherPrescriberIndicator(value); break;
-                    case "FY": dto.setDurFreeTextMessage(value); break;
-                    case "NS": dto.setDurAdditionalText(value); break;
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<ResponseDurPpsDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromResponseDurPpsDTO(ResponseDurPpsDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "J6", dto.getDurPpsResponseCodeCounter());
+            putIfNotNull(values, "E4", dto.getReasonForServiceCode());
+            putIfNotNull(values, "FS", dto.getClinicalSignificanceCode());
+            putIfNotNull(values, "FT", dto.getOtherPharmacyIndicator());
+            putIfNotNull(values, "FV", dto.getQuantityOfPreviousFill());
+            putIfNotNull(values, "FU", dto.getPreviousDateOfFill());
+            putIfNotNull(values, "FW", dto.getDatabaseIndicator());
+            putIfNotNull(values, "FX", dto.getOtherPrescriberIndicator());
+            putIfNotNull(values, "FY", dto.getDurFreeTextMessage());
+            putIfNotNull(values, "NS", dto.getDurAdditionalText());
         }
     }
 }

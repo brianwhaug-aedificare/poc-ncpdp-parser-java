@@ -51,8 +51,7 @@ public class GroupBase {
         return segmentDTOs;
     }
 
-    @Override
-    public String toString() {
+    public String toNCPDPString() {
         StringBuilder sb = new StringBuilder();
         sb.append(Constants.GROUP_SEPARATOR);
         sb.append(Constants.SEGMENT_SEPARATOR);

@@ -2,7 +2,9 @@ package poc.ncpdp.parser.segments;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import poc.ncpdp.data.segments.AdditionalDocumentationDTO;
 
@@ -13,6 +15,11 @@ public class AdditionalDocumentation extends SegmentBase {
     public AdditionalDocumentation() {
         super();
         this.additionalDocumentationDTO = new AdditionalDocumentationDTO();
+    }
+
+    public AdditionalDocumentation(AdditionalDocumentationDTO additionalDocumentationDTO) {
+        super();
+        this.additionalDocumentationDTO = additionalDocumentationDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -41,28 +48,59 @@ public class AdditionalDocumentation extends SegmentBase {
         return this.additionalDocumentationDTO;
     }
 
-    private class AdditionalDocumentationMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromAdditionalDocumentationDTO(additionalDocumentationDTO, values);
+        return values;
+    }
+
+    private static class AdditionalDocumentationMapper {
+        private static final Map<String, BiConsumer<AdditionalDocumentationDTO, String>> FIELD_SETTERS;
+        static {
+            FIELD_SETTERS = new HashMap<>();
+            FIELD_SETTERS.put("2Q", (dto, v) -> dto.setAdditionalDocumentationTypeId(v));
+            FIELD_SETTERS.put("2V", (dto, v) -> dto.setRequestPeriodBeginDate(v));
+            FIELD_SETTERS.put("2W", (dto, v) -> dto.setRequestPeriodRecertRevisedDate(v));
+            FIELD_SETTERS.put("2U", (dto, v) -> dto.setRequestStatus(v));
+            FIELD_SETTERS.put("2S", (dto, v) -> dto.setLengthOfNeedQualifier(v));
+            FIELD_SETTERS.put("2R", (dto, v) -> dto.setLengthOfNeed(v));
+            FIELD_SETTERS.put("2T", (dto, v) -> dto.setPrescriberSupplierDateSigned(v));
+            FIELD_SETTERS.put("2X", (dto, v) -> dto.setSupportingDocumentation(v));
+            FIELD_SETTERS.put("2Z", (dto, v) -> dto.setQuestionNumberLetterCount(v));
+            FIELD_SETTERS.put("4B", (dto, v) -> dto.setQuestionNumberLetter(v));
+            FIELD_SETTERS.put("4D", (dto, v) -> dto.setQuestionPercentResponse(v));
+            FIELD_SETTERS.put("4G", (dto, v) -> dto.setQuestionDateResponse(v));
+            FIELD_SETTERS.put("4H", (dto, v) -> dto.setQuestionDollarAmountResponse(v));
+            FIELD_SETTERS.put("4J", (dto, v) -> dto.setQuestionNumericResponse(v));
+            FIELD_SETTERS.put("4K", (dto, v) -> dto.setQuestionAlphanumericResponse(v));
+        }
+
         public void updateAdditionalDocumentationDTOFromMap(Map<String, Object> values, AdditionalDocumentationDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "2Q": dto.setAdditionalDocumentationTypeId(value); break;
-                    case "2V": dto.setRequestPeriodBeginDate(value); break;
-                    case "2W": dto.setRequestPeriodRecertRevisedDate(value); break;
-                    case "2U": dto.setRequestStatus(value); break;
-                    case "2S": dto.setLengthOfNeedQualifier(value); break;
-                    case "2R": dto.setLengthOfNeed(value); break;
-                    case "2T": dto.setPrescriberSupplierDateSigned(value); break;
-                    case "2X": dto.setSupportingDocumentation(value); break;
-                    case "2Z": dto.setQuestionNumberLetterCount(value); break;
-                    case "4B": dto.setQuestionNumberLetter(value); break;
-                    case "4D": dto.setQuestionPercentResponse(value); break;
-                    case "4G": dto.setQuestionDateResponse(value); break;
-                    case "4H": dto.setQuestionDollarAmountResponse(value); break;
-                    case "4J": dto.setQuestionNumericResponse(value); break;
-                    case "4K": dto.setQuestionAlphanumericResponse(value); break;
+            values.forEach((key, value) -> {
+                BiConsumer<AdditionalDocumentationDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromAdditionalDocumentationDTO(AdditionalDocumentationDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "2Q", dto.getAdditionalDocumentationTypeId());
+            putIfNotNull(values, "2V", dto.getRequestPeriodBeginDate());
+            putIfNotNull(values, "2W", dto.getRequestPeriodRecertRevisedDate());
+            putIfNotNull(values, "2U", dto.getRequestStatus());
+            putIfNotNull(values, "2S", dto.getLengthOfNeedQualifier());
+            putIfNotNull(values, "2R", dto.getLengthOfNeed());
+            putIfNotNull(values, "2T", dto.getPrescriberSupplierDateSigned());
+            putIfNotNull(values, "2X", dto.getSupportingDocumentation());
+            putIfNotNull(values, "2Z", dto.getQuestionNumberLetterCount());
+            putIfNotNull(values, "4B", dto.getQuestionNumberLetter());
+            putIfNotNull(values, "4D", dto.getQuestionPercentResponse());
+            putIfNotNull(values, "4G", dto.getQuestionDateResponse());
+            putIfNotNull(values, "4H", dto.getQuestionDollarAmountResponse());
+            putIfNotNull(values, "4J", dto.getQuestionNumericResponse());
+            putIfNotNull(values, "4K", dto.getQuestionAlphanumericResponse());
         }
     }
 }

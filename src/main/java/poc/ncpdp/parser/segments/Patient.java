@@ -2,6 +2,7 @@ package poc.ncpdp.parser.segments;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.PatientDTO;
@@ -14,6 +15,11 @@ public class Patient extends SegmentBase {
     public Patient() {
         super();
         this.patientDTO = new PatientDTO();
+    }
+
+    public Patient(PatientDTO patientDTO) {
+        super();
+        this.patientDTO = patientDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -44,65 +50,63 @@ public class Patient extends SegmentBase {
         return this.patientDTO;
     }
 
-    public class PatientMapper {
-        public void updatePatientDTOFromMap(Map<String, Object> values, PatientDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "CX":
-                        dto.setPatientIdQualifier(value);
-                        break;
-                    case "CY":
-                        dto.setPatientId(value);
-                        break;
-                    case "C4":
-                        dto.setDateOfBirth(value);
-                        break;
-                    case "C5":
-                        dto.setPatientGenderCode(value);
-                        break;
-                    case "CA":
-                        dto.setPatientFirstName(value);
-                        break;
-                    case "CB":
-                        dto.setPatientLastName(value);
-                        break;
-                    case "CM":
-                        dto.setPatientStreetAddress(value);
-                        break;
-                    case "CN":
-                        dto.setPatientCity(value);
-                        break;
-                    case "CO":
-                        dto.setPatientStateOrProvince(value);
-                        break;
-                    case "CP":
-                        dto.setPatientZipPostalCode(value);
-                        break;
-                    case "CQ":
-                        dto.setPatientPhoneNumber(value);
-                        break;
-                    case "C7":
-                        dto.setPlaceOfService(value);
-                        break;
-                    case "CZ":
-                        dto.setEmployerId(value);
-                        break;
-                    case "1C":
-                        dto.setSmokerNonSmokerCode(value);
-                        break;
-                    case "2C":
-                        dto.setPregnancyIndicator(value);
-                        break;
-                    case "HN":
-                        dto.setPatientEmailAddress(value);
-                        break;
-                    case "4X":
-                        dto.setPatientResidence(value);
-                        break;
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromPatientDTO(patientDTO, values);
+        return values;
+    }
 
+    private static class PatientMapper {
+        private static final java.util.Map<String, java.util.function.BiConsumer<PatientDTO, String>> FIELD_SETTERS;
+        static {
+            FIELD_SETTERS = new java.util.HashMap<>();
+            FIELD_SETTERS.put("CX", PatientDTO::setPatientIdQualifier);
+            FIELD_SETTERS.put("CY", PatientDTO::setPatientId);
+            FIELD_SETTERS.put("C4", PatientDTO::setDateOfBirth);
+            FIELD_SETTERS.put("C5", PatientDTO::setPatientGenderCode);
+            FIELD_SETTERS.put("CA", PatientDTO::setPatientFirstName);
+            FIELD_SETTERS.put("CB", PatientDTO::setPatientLastName);
+            FIELD_SETTERS.put("CM", PatientDTO::setPatientStreetAddress);
+            FIELD_SETTERS.put("CN", PatientDTO::setPatientCity);
+            FIELD_SETTERS.put("CO", PatientDTO::setPatientStateOrProvince);
+            FIELD_SETTERS.put("CP", PatientDTO::setPatientZipPostalCode);
+            FIELD_SETTERS.put("CQ", PatientDTO::setPatientPhoneNumber);
+            FIELD_SETTERS.put("C7", PatientDTO::setPlaceOfService);
+            FIELD_SETTERS.put("CZ", PatientDTO::setEmployerId);
+            FIELD_SETTERS.put("1C", PatientDTO::setSmokerNonSmokerCode);
+            FIELD_SETTERS.put("2C", PatientDTO::setPregnancyIndicator);
+            FIELD_SETTERS.put("HN", PatientDTO::setPatientEmailAddress);
+            FIELD_SETTERS.put("4X", PatientDTO::setPatientResidence);
+        }
+
+        public void updatePatientDTOFromMap(Map<String, Object> values, PatientDTO dto) {
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<PatientDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromPatientDTO(PatientDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "CX", dto.getPatientIdQualifier());
+            putIfNotNull(values, "CY", dto.getPatientId());
+            putIfNotNull(values, "C4", dto.getDateOfBirth());
+            putIfNotNull(values, "C5", dto.getPatientGenderCode());
+            putIfNotNull(values, "CA", dto.getPatientFirstName());
+            putIfNotNull(values, "CB", dto.getPatientLastName());
+            putIfNotNull(values, "CM", dto.getPatientStreetAddress());
+            putIfNotNull(values, "CN", dto.getPatientCity());
+            putIfNotNull(values, "CO", dto.getPatientStateOrProvince());
+            putIfNotNull(values, "CP", dto.getPatientZipPostalCode());
+            putIfNotNull(values, "CQ", dto.getPatientPhoneNumber());
+            putIfNotNull(values, "C7", dto.getPlaceOfService());
+            putIfNotNull(values, "CZ", dto.getEmployerId());
+            putIfNotNull(values, "1C", dto.getSmokerNonSmokerCode());
+            putIfNotNull(values, "2C", dto.getPregnancyIndicator());
+            putIfNotNull(values, "HN", dto.getPatientEmailAddress());
+            putIfNotNull(values, "4X", dto.getPatientResidence());
         }
     }
 }

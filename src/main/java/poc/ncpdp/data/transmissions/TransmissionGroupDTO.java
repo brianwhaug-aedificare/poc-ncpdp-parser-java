@@ -9,4 +9,8 @@ public class TransmissionGroupDTO {
     public TransmissionGroupDTO(List<SegmentDTO> segments) {
         this.segments = segments;
     }
+
+    public List<SegmentDTO> getSegments() {
+        return segments;
+    }
 }

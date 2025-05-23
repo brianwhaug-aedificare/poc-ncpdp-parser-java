@@ -2,18 +2,24 @@ package poc.ncpdp.parser.segments;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import poc.ncpdp.data.segments.WorkersCompDTO;
 
 public class WorkersComp extends SegmentBase {
-
     private final WorkersCompMapper mapper = new WorkersCompMapper();
     private WorkersCompDTO workersCompDTO;
 
     public WorkersComp() {
         super();
         this.workersCompDTO = new WorkersCompDTO();
+    }
+
+    public WorkersComp(WorkersCompDTO workersCompDTO) {
+        super();
+        this.workersCompDTO = workersCompDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -47,33 +53,69 @@ public class WorkersComp extends SegmentBase {
         return this.workersCompDTO;
     }
 
-    private class WorkersCompMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromWorkersCompDTO(workersCompDTO, values);
+        return values;
+    }
+
+    private static class WorkersCompMapper {
+        private static final Map<String, BiConsumer<WorkersCompDTO, String>> FIELD_SETTERS;
+        static {
+            FIELD_SETTERS = new HashMap<>();
+            FIELD_SETTERS.put("DY", (dto, v) -> dto.setDateOfInjury(v));
+            FIELD_SETTERS.put("CF", (dto, v) -> dto.setEmployerName(v));
+            FIELD_SETTERS.put("CG", (dto, v) -> dto.setEmployerStreetAddress(v));
+            FIELD_SETTERS.put("CH", (dto, v) -> dto.setEmployerCityAddress(v));
+            FIELD_SETTERS.put("CI", (dto, v) -> dto.setEmployerStateProvinceAddress(v));
+            FIELD_SETTERS.put("CJ", (dto, v) -> dto.setEmployerZipPostalCode(v));
+            FIELD_SETTERS.put("CK", (dto, v) -> dto.setEmployerPhoneNumber(v));
+            FIELD_SETTERS.put("CL", (dto, v) -> dto.setEmployerContactName(v));
+            FIELD_SETTERS.put("CR", (dto, v) -> dto.setCarrierId(v));
+            FIELD_SETTERS.put("DZ", (dto, v) -> dto.setClaimReferenceId(v));
+            FIELD_SETTERS.put("TR", (dto, v) -> dto.setBillingEntityTypeIndicator(v));
+            FIELD_SETTERS.put("TS", (dto, v) -> dto.setPayToQualifier(v));
+            FIELD_SETTERS.put("TT", (dto, v) -> dto.setPayToId(v));
+            FIELD_SETTERS.put("TU", (dto, v) -> dto.setPayToName(v));
+            FIELD_SETTERS.put("TV", (dto, v) -> dto.setPayToStreetAddress(v));
+            FIELD_SETTERS.put("TW", (dto, v) -> dto.setPayToCityAddress(v));
+            FIELD_SETTERS.put("TX", (dto, v) -> dto.setPayToStateProvinceAddress(v));
+            FIELD_SETTERS.put("TY", (dto, v) -> dto.setPayToZipPostalZone(v));
+            FIELD_SETTERS.put("TZ", (dto, v) -> dto.setGenericEquivalentProductIdQualifier(v));
+            FIELD_SETTERS.put("UA", (dto, v) -> dto.setGenericEquivalentProductId(v));
+        }
+
         public void updateWorkersCompDTOFromMap(Map<String, Object> values, WorkersCompDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "DY": dto.setDateOfInjury(value); break;
-                    case "CF": dto.setEmployerName(value); break;
-                    case "CG": dto.setEmployerStreetAddress(value); break;
-                    case "CH": dto.setEmployerCityAddress(value); break;
-                    case "CI": dto.setEmployerStateProvinceAddress(value); break;
-                    case "CJ": dto.setEmployerZipPostalCode(value); break;
-                    case "CK": dto.setEmployerPhoneNumber(value); break;
-                    case "CL": dto.setEmployerContactName(value); break;
-                    case "CR": dto.setCarrierId(value); break;
-                    case "DZ": dto.setClaimReferenceId(value); break;
-                    case "TR": dto.setBillingEntityTypeIndicator(value); break;
-                    case "TS": dto.setPayToQualifier(value); break;
-                    case "TT": dto.setPayToId(value); break;
-                    case "TU": dto.setPayToName(value); break;
-                    case "TV": dto.setPayToStreetAddress(value); break;
-                    case "TW": dto.setPayToCityAddress(value); break;
-                    case "TX": dto.setPayToStateProvinceAddress(value); break;
-                    case "TY": dto.setPayToZipPostalZone(value); break;
-                    case "TZ": dto.setGenericEquivalentProductIdQualifier(value); break;
-                    case "UA": dto.setGenericEquivalentProductId(value); break;
+            values.forEach((key, value) -> {
+                BiConsumer<WorkersCompDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromWorkersCompDTO(WorkersCompDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "DY", dto.getDateOfInjury());
+            putIfNotNull(values, "CF", dto.getEmployerName());
+            putIfNotNull(values, "CG", dto.getEmployerStreetAddress());
+            putIfNotNull(values, "CH", dto.getEmployerCityAddress());
+            putIfNotNull(values, "CI", dto.getEmployerStateProvinceAddress());
+            putIfNotNull(values, "CJ", dto.getEmployerZipPostalCode());
+            putIfNotNull(values, "CK", dto.getEmployerPhoneNumber());
+            putIfNotNull(values, "CL", dto.getEmployerContactName());
+            putIfNotNull(values, "CR", dto.getCarrierId());
+            putIfNotNull(values, "DZ", dto.getClaimReferenceId());
+            putIfNotNull(values, "TR", dto.getBillingEntityTypeIndicator());
+            putIfNotNull(values, "TS", dto.getPayToQualifier());
+            putIfNotNull(values, "TT", dto.getPayToId());
+            putIfNotNull(values, "TU", dto.getPayToName());
+            putIfNotNull(values, "TV", dto.getPayToStreetAddress());
+            putIfNotNull(values, "TW", dto.getPayToCityAddress());
+            putIfNotNull(values, "TX", dto.getPayToStateProvinceAddress());
+            putIfNotNull(values, "TY", dto.getPayToZipPostalZone());
+            putIfNotNull(values, "TZ", dto.getGenericEquivalentProductIdQualifier());
+            putIfNotNull(values, "UA", dto.getGenericEquivalentProductId());
         }
     }
 }

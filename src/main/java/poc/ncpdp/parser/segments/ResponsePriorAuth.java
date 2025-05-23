@@ -1,7 +1,9 @@
 package poc.ncpdp.parser.segments;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import poc.ncpdp.data.segments.ResponsePriorAuthDTO;
 
 public class ResponsePriorAuth extends SegmentBase {
@@ -11,6 +13,11 @@ public class ResponsePriorAuth extends SegmentBase {
     public ResponsePriorAuth() {
         super();
         this.responsePriorAuthDTO = new ResponsePriorAuthDTO();
+    }
+
+    public ResponsePriorAuth(ResponsePriorAuthDTO responsePriorAuthDTO) {
+        super();
+        this.responsePriorAuthDTO = responsePriorAuthDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -32,20 +39,48 @@ public class ResponsePriorAuth extends SegmentBase {
         return this.responsePriorAuthDTO;
     }
 
-    private class ResponsePriorAuthMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromResponsePriorAuthDTO(responsePriorAuthDTO, values);
+        return values;
+    }
+
+    private static class ResponsePriorAuthMapper {
+        private static final Map<String, BiConsumer<ResponsePriorAuthDTO, String>> FIELD_SETTERS = Map.of(
+            "PR", ResponsePriorAuthDTO::setPriorAuthorizationProcessedDate,
+            "PS", ResponsePriorAuthDTO::setPriorAuthorizationEffectiveDate,
+            "PT", ResponsePriorAuthDTO::setPriorAuthorizationExpirationDate,
+            "RA", ResponsePriorAuthDTO::setPriorAuthorizationQuantity,
+            "RB", ResponsePriorAuthDTO::setPriorAuthorizationDollarsAuthorized,
+            "PW", ResponsePriorAuthDTO::setPriorAuthorizationNumberOfRefillsAuthorized,
+            "PX", ResponsePriorAuthDTO::setPriorAuthorizationQuantityAccumulated,
+            "PY", ResponsePriorAuthDTO::setPriorAuthorizationNumberAssigned
+        );
+
         public void updateResponsePriorAuthDTOFromMap(Map<String, Object> values, ResponsePriorAuthDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "PR": dto.setPriorAuthorizationProcessedDate(value); break;
-                    case "PS": dto.setPriorAuthorizationEffectiveDate(value); break;
-                    case "PT": dto.setPriorAuthorizationExpirationDate(value); break;
-                    case "RA": dto.setPriorAuthorizationQuantity(value); break;
-                    case "RB": dto.setPriorAuthorizationDollarsAuthorized(value); break;
-                    case "PW": dto.setPriorAuthorizationNumberOfRefillsAuthorized(value); break;
-                    case "PX": dto.setPriorAuthorizationQuantityAccumulated(value); break;
-                    case "PY": dto.setPriorAuthorizationNumberAssigned(value); break;
+            values.forEach((key, value) -> {
+                BiConsumer<ResponsePriorAuthDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
+            });
+        }
+
+        public void updateMapFromResponsePriorAuthDTO(ResponsePriorAuthDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "PR", dto.getPriorAuthorizationProcessedDate());
+            putIfNotNull(values, "PS", dto.getPriorAuthorizationEffectiveDate());
+            putIfNotNull(values, "PT", dto.getPriorAuthorizationExpirationDate());
+            putIfNotNull(values, "RA", dto.getPriorAuthorizationQuantity());
+            putIfNotNull(values, "RB", dto.getPriorAuthorizationDollarsAuthorized());
+            putIfNotNull(values, "PW", dto.getPriorAuthorizationNumberOfRefillsAuthorized());
+            putIfNotNull(values, "PX", dto.getPriorAuthorizationQuantityAccumulated());
+            putIfNotNull(values, "PY", dto.getPriorAuthorizationNumberAssigned());
+        }
+
+        private void putIfNotNull(Map<String, Object> map, String key, Object value) {
+            if (value != null) {
+                map.put(key, value);
             }
         }
     }

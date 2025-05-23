@@ -2,18 +2,24 @@ package poc.ncpdp.parser.segments;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import poc.ncpdp.data.segments.CoordOfBenefitsDTO;
 
 public class CoordOfBenefits extends SegmentBase {
-
     private final CoordOfBenefitsMapper mapper = new CoordOfBenefitsMapper();
     private CoordOfBenefitsDTO coordOfBenefitsDTO;
 
     public CoordOfBenefits() {
         super();
         this.coordOfBenefitsDTO = new CoordOfBenefitsDTO();
+    }
+
+    public CoordOfBenefits(CoordOfBenefitsDTO coordOfBenefitsDTO) {
+        super();
+        this.coordOfBenefitsDTO = coordOfBenefitsDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -44,30 +50,63 @@ public class CoordOfBenefits extends SegmentBase {
         return this.coordOfBenefitsDTO;
     }
 
-    private class CoordOfBenefitsMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromCoordOfBenefitsDTO(coordOfBenefitsDTO, values);
+        return values;
+    }
+
+    private static class CoordOfBenefitsMapper {
+        private static final Map<String, BiConsumer<CoordOfBenefitsDTO, String>> FIELD_SETTERS;
+        static {
+            FIELD_SETTERS = new HashMap<>();
+            FIELD_SETTERS.put("4C", (dto, v) -> dto.setCoordinationOfBenefitsOtherPaymentsCount(v));
+            FIELD_SETTERS.put("5C", (dto, v) -> dto.setOtherPayerCoverageType(v));
+            FIELD_SETTERS.put("6C", (dto, v) -> dto.setOtherPayerIdQualifier(v));
+            FIELD_SETTERS.put("7C", (dto, v) -> dto.setOtherPayerId(v));
+            FIELD_SETTERS.put("E8", (dto, v) -> dto.setOtherPayerDate(v));
+            FIELD_SETTERS.put("A7", (dto, v) -> dto.setInternalControlNumber(v));
+            FIELD_SETTERS.put("HB", (dto, v) -> dto.setOtherPayerAmountPaidCount(v));
+            FIELD_SETTERS.put("HC", (dto, v) -> dto.setOtherPayerAmountPaidQualifier(v));
+            FIELD_SETTERS.put("DV", (dto, v) -> dto.setOtherPayerAmountPaid(v));
+            FIELD_SETTERS.put("5E", (dto, v) -> dto.setOtherPayerRejectCount(v));
+            FIELD_SETTERS.put("6E", (dto, v) -> dto.setOtherPayerRejectCode(v));
+            FIELD_SETTERS.put("NR", (dto, v) -> dto.setOtherPayerPatientResponsibilityAmountCount(v));
+            FIELD_SETTERS.put("NP", (dto, v) -> dto.setOtherPayerPatientResponsibilityAmountQualifier(v));
+            FIELD_SETTERS.put("NQ", (dto, v) -> dto.setOtherPayerPatientResponsibilityAmount(v));
+            FIELD_SETTERS.put("MU", (dto, v) -> dto.setBenefitStageCount(v));
+            FIELD_SETTERS.put("MV", (dto, v) -> dto.setBenefitStageQualifier(v));
+            FIELD_SETTERS.put("MW", (dto, v) -> dto.setBenefitStageAmount(v));
+        }
+
         public void updateCoordOfBenefitsDTOFromMap(Map<String, Object> values, CoordOfBenefitsDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "4C": dto.setCoordinationOfBenefitsOtherPaymentsCount(value); break;
-                    case "5C": dto.setOtherPayerCoverageType(value); break;
-                    case "6C": dto.setOtherPayerIdQualifier(value); break;
-                    case "7C": dto.setOtherPayerId(value); break;
-                    case "E8": dto.setOtherPayerDate(value); break;
-                    case "A7": dto.setInternalControlNumber(value); break;
-                    case "HB": dto.setOtherPayerAmountPaidCount(value); break;
-                    case "HC": dto.setOtherPayerAmountPaidQualifier(value); break;
-                    case "DV": dto.setOtherPayerAmountPaid(value); break;
-                    case "5E": dto.setOtherPayerRejectCount(value); break;
-                    case "6E": dto.setOtherPayerRejectCode(value); break;
-                    case "NR": dto.setOtherPayerPatientResponsibilityAmountCount(value); break;
-                    case "NP": dto.setOtherPayerPatientResponsibilityAmountQualifier(value); break;
-                    case "NQ": dto.setOtherPayerPatientResponsibilityAmount(value); break;
-                    case "MU": dto.setBenefitStageCount(value); break;
-                    case "MV": dto.setBenefitStageQualifier(value); break;
-                    case "MW": dto.setBenefitStageAmount(value); break;
+            values.forEach((key, value) -> {
+                BiConsumer<CoordOfBenefitsDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromCoordOfBenefitsDTO(CoordOfBenefitsDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "4C", dto.getCoordinationOfBenefitsOtherPaymentsCount());
+            putIfNotNull(values, "5C", dto.getOtherPayerCoverageType());
+            putIfNotNull(values, "6C", dto.getOtherPayerIdQualifier());
+            putIfNotNull(values, "7C", dto.getOtherPayerId());
+            putIfNotNull(values, "E8", dto.getOtherPayerDate());
+            putIfNotNull(values, "A7", dto.getInternalControlNumber());
+            putIfNotNull(values, "HB", dto.getOtherPayerAmountPaidCount());
+            putIfNotNull(values, "HC", dto.getOtherPayerAmountPaidQualifier());
+            putIfNotNull(values, "DV", dto.getOtherPayerAmountPaid());
+            putIfNotNull(values, "5E", dto.getOtherPayerRejectCount());
+            putIfNotNull(values, "6E", dto.getOtherPayerRejectCode());
+            putIfNotNull(values, "NR", dto.getOtherPayerPatientResponsibilityAmountCount());
+            putIfNotNull(values, "NP", dto.getOtherPayerPatientResponsibilityAmountQualifier());
+            putIfNotNull(values, "NQ", dto.getOtherPayerPatientResponsibilityAmount());
+            putIfNotNull(values, "MU", dto.getBenefitStageCount());
+            putIfNotNull(values, "MV", dto.getBenefitStageQualifier());
+            putIfNotNull(values, "MW", dto.getBenefitStageAmount());
         }
     }
 }

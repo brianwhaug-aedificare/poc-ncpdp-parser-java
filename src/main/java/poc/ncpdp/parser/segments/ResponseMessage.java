@@ -2,6 +2,7 @@ package poc.ncpdp.parser.segments;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.ResponseMessageDTO;
@@ -13,6 +14,11 @@ public class ResponseMessage extends SegmentBase {
     public ResponseMessage() {
         super();
         this.responseMessageDTO = new ResponseMessageDTO();
+    }
+
+    public ResponseMessage(ResponseMessageDTO responseMessageDTO) {
+        super();
+        this.responseMessageDTO = responseMessageDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -27,14 +33,29 @@ public class ResponseMessage extends SegmentBase {
         return this.responseMessageDTO;
     }
 
-    private class ResponseMessageMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromResponseMessageDTO(responseMessageDTO, values);
+        return values;
+    }
+
+    private static class ResponseMessageMapper {
+        private static final Map<String, java.util.function.BiConsumer<ResponseMessageDTO, String>> FIELD_SETTERS = Map.of(
+            "F4", ResponseMessageDTO::setMessage
+        );
+
         public void updateResponseMessageDTOFromMap(Map<String, Object> values, ResponseMessageDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "F4": dto.setMessage(value); break;
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<ResponseMessageDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromResponseMessageDTO(ResponseMessageDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "F4", dto.getMessage());
         }
     }
 }

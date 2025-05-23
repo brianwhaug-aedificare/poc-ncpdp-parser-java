@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import lombok.Data;
+import poc.ncpdp.data.transmissions.ResponseHeaderDTO;
 import poc.ncpdp.parser.utils.FixedWidth;
 @Data
 public class ResponseHeader implements TransmissionHeader {
@@ -55,6 +56,24 @@ public class ResponseHeader implements TransmissionHeader {
         this.serviceProviderIdQualifier = (String) header.get(SERVICE_PROVIDER_ID_QUALIFIER);
         this.serviceProviderId = (String) header.get(SERVICE_PROVIDER_ID);
         this.dateOfService = (String) header.get(DATE_OF_SERVICE);
+    }
+
+    public ResponseHeader(ResponseHeaderDTO headerDTO) {
+        this.version = headerDTO.getVersion();
+        this.transactionCode = headerDTO.getTransactionCode();
+        this.transactionCount = headerDTO.getTransactionCount();
+        this.headerResponseStatus = headerDTO.getHeaderResponseStatus();
+        this.serviceProviderIdQualifier = headerDTO.getServiceProviderIdQualifier();
+        this.serviceProviderId = headerDTO.getServiceProviderId();
+        this.dateOfService = headerDTO.getDateOfService();
+
+        header.put(VERSION, this.version);
+        header.put(TRANSACTION_CODE, this.transactionCode);
+        header.put(TRANSACTION_COUNT, this.transactionCount);
+        header.put(HEADER_RESPONSE_STATUS, this.headerResponseStatus);
+        header.put(SERVICE_PROVIDER_ID_QUALIFIER, this.serviceProviderIdQualifier);
+        header.put(SERVICE_PROVIDER_ID, this.serviceProviderId);
+        header.put(DATE_OF_SERVICE, this.dateOfService);
     }
 
     public Map<String, Object> getHeader() {

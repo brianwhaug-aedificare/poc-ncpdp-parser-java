@@ -1,6 +1,7 @@
 package poc.ncpdp.parser.segments;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.ResponsePricingDTO;
@@ -12,6 +13,11 @@ public class ResponsePricing extends SegmentBase {
     public ResponsePricing() {
         super();
         this.responsePricingDTO = new ResponsePricingDTO();
+    }
+
+    public ResponsePricing(ResponsePricingDTO responsePricingDTO) {
+        super();
+        this.responsePricingDTO = responsePricingDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -70,58 +76,117 @@ public class ResponsePricing extends SegmentBase {
         return this.responsePricingDTO;
     }
 
-    private class ResponsePricingMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromResponsePricingDTO(responsePricingDTO, values);
+        return values;
+    }
+
+    private static class ResponsePricingMapper {
+        private static final Map<String, java.util.function.BiConsumer<ResponsePricingDTO, String>> FIELD_SETTERS = Map.ofEntries(
+            Map.entry("F5", ResponsePricingDTO::setGrossAmountDue),
+            Map.entry("F6", ResponsePricingDTO::setIngredientCostPaid),
+            Map.entry("F7", ResponsePricingDTO::setDispensingFeePaid),
+            Map.entry("AV", ResponsePricingDTO::setTaxExemptIndicator),
+            Map.entry("AW", ResponsePricingDTO::setFlatSalesTaxAmountPaid),
+            Map.entry("AX", ResponsePricingDTO::setPercentageSalesTaxAmountPaid),
+            Map.entry("AY", ResponsePricingDTO::setPercentageSalesTaxRatePaid),
+            Map.entry("AZ", ResponsePricingDTO::setPercentageSalesTaxBasisPaid),
+            Map.entry("FL", ResponsePricingDTO::setIncentiveAmountPaid),
+            Map.entry("J1", ResponsePricingDTO::setProfessionalServiceFeePaid),
+            Map.entry("J2", ResponsePricingDTO::setOtherAmountPaidCount),
+            Map.entry("J3", ResponsePricingDTO::setOtherAmountPaidQualifier),
+            Map.entry("J4", ResponsePricingDTO::setOtherAmountPaid),
+            Map.entry("J5", ResponsePricingDTO::setOtherPayerAmountRecognized),
+            Map.entry("F9", ResponsePricingDTO::setTotalAmountPaid),
+            Map.entry("FM", ResponsePricingDTO::setBasisOfReimbursementDetermination),
+            Map.entry("FN", ResponsePricingDTO::setAmountAttributedToSalesTax),
+            Map.entry("FC", ResponsePricingDTO::setAccumulatedDeductibleAmount),
+            Map.entry("FD", ResponsePricingDTO::setRemainingDeductibleAmount),
+            Map.entry("FE", ResponsePricingDTO::setRemainingBenefitAmount),
+            Map.entry("FH", ResponsePricingDTO::setAmountAppliedToPeriodicDeductible),
+            Map.entry("FI", ResponsePricingDTO::setAmountOfCopay),
+            Map.entry("FK", ResponsePricingDTO::setAmountExceedingPeriodicBenefitMaximum),
+            Map.entry("HH", ResponsePricingDTO::setBasisOfCalculationDispensingFee),
+            Map.entry("HJ", ResponsePricingDTO::setBasisOfCalculationCopay),
+            Map.entry("HK", ResponsePricingDTO::setBasisOfCalculationFlatSalesTax),
+            Map.entry("HM", ResponsePricingDTO::setBasisOfCalculationPercentageSalesTax),
+            Map.entry("NZ", ResponsePricingDTO::setAmountAttributedToProcessorFee),
+            Map.entry("EQ", ResponsePricingDTO::setPatientSalesTaxAmount),
+            Map.entry("2Y", ResponsePricingDTO::setPlanSalesTaxAmount),
+            Map.entry("4U", ResponsePricingDTO::setAmountOfCoinsurance),
+            Map.entry("4V", ResponsePricingDTO::setBasisOfCalculationCoinsurance),
+            Map.entry("MU", ResponsePricingDTO::setBenefitStageCount),
+            Map.entry("MV", ResponsePricingDTO::setBenefitStageQualifier),
+            Map.entry("MW", ResponsePricingDTO::setBenefitStageAmount),
+            Map.entry("G3", ResponsePricingDTO::setEstimatedGenericSavings),
+            Map.entry("UC", ResponsePricingDTO::setSpendingAccountAmountRemaining),
+            Map.entry("UD", ResponsePricingDTO::setHealthPlanFundedAssistanceAmount),
+            Map.entry("UJ", ResponsePricingDTO::setAmountAttributedToProviderNetworkSelection),
+            Map.entry("UK", ResponsePricingDTO::setAmountAttributedToProductSelectionBrandDrug),
+            Map.entry("UM", ResponsePricingDTO::setAmountAttributedToProductSelectionNonPreferredFormularySelection),
+            Map.entry("UN", ResponsePricingDTO::setAmountAttributedToProductSelectionBrandNonPreferredFormularySelection),
+            Map.entry("UP", ResponsePricingDTO::setAmountAttributedToCoverageGap),
+            Map.entry("U8", ResponsePricingDTO::setIngredientCostContractedReimbursableAmount),
+            Map.entry("U9", ResponsePricingDTO::setDispensingFeeContractedReimbursableAmount)
+        );
+
         public void updateResponsePricingDTOFromMap(Map<String, Object> values, ResponsePricingDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "F5": dto.setGrossAmountDue(value); break;
-                    case "F6": dto.setIngredientCostPaid(value); break;
-                    case "F7": dto.setDispensingFeePaid(value); break;
-                    case "AV": dto.setTaxExemptIndicator(value); break;
-                    case "AW": dto.setFlatSalesTaxAmountPaid(value); break;
-                    case "AX": dto.setPercentageSalesTaxAmountPaid(value); break;
-                    case "AY": dto.setPercentageSalesTaxRatePaid(value); break;
-                    case "AZ": dto.setPercentageSalesTaxBasisPaid(value); break;
-                    case "FL": dto.setIncentiveAmountPaid(value); break;
-                    case "J1": dto.setProfessionalServiceFeePaid(value); break;
-                    case "J2": dto.setOtherAmountPaidCount(value); break;
-                    case "J3": dto.setOtherAmountPaidQualifier(value); break;
-                    case "J4": dto.setOtherAmountPaid(value); break;
-                    case "J5": dto.setOtherPayerAmountRecognized(value); break;
-                    case "F9": dto.setTotalAmountPaid(value); break;
-                    case "FM": dto.setBasisOfReimbursementDetermination(value); break;
-                    case "FN": dto.setAmountAttributedToSalesTax(value); break;
-                    case "FC": dto.setAccumulatedDeductibleAmount(value); break;
-                    case "FD": dto.setRemainingDeductibleAmount(value); break;
-                    case "FE": dto.setRemainingBenefitAmount(value); break;
-                    case "FH": dto.setAmountAppliedToPeriodicDeductible(value); break;
-                    case "FI": dto.setAmountOfCopay(value); break;
-                    case "FK": dto.setAmountExceedingPeriodicBenefitMaximum(value); break;
-                    case "HH": dto.setBasisOfCalculationDispensingFee(value); break;
-                    case "HJ": dto.setBasisOfCalculationCopay(value); break;
-                    case "HK": dto.setBasisOfCalculationFlatSalesTax(value); break;
-                    case "HM": dto.setBasisOfCalculationPercentageSalesTax(value); break;
-                    case "NZ": dto.setAmountAttributedToProcessorFee(value); break;
-                    case "EQ": dto.setPatientSalesTaxAmount(value); break;
-                    case "2Y": dto.setPlanSalesTaxAmount(value); break;
-                    case "4U": dto.setAmountOfCoinsurance(value); break;
-                    case "4V": dto.setBasisOfCalculationCoinsurance(value); break;
-                    case "MU": dto.setBenefitStageCount(value); break;
-                    case "MV": dto.setBenefitStageQualifier(value); break;
-                    case "MW": dto.setBenefitStageAmount(value); break;
-                    case "G3": dto.setEstimatedGenericSavings(value); break;
-                    case "UC": dto.setSpendingAccountAmountRemaining(value); break;
-                    case "UD": dto.setHealthPlanFundedAssistanceAmount(value); break;
-                    case "UJ": dto.setAmountAttributedToProviderNetworkSelection(value); break;
-                    case "UK": dto.setAmountAttributedToProductSelectionBrandDrug(value); break;
-                    case "UM": dto.setAmountAttributedToProductSelectionNonPreferredFormularySelection(value); break;
-                    case "UN": dto.setAmountAttributedToProductSelectionBrandNonPreferredFormularySelection(value); break;
-                    case "UP": dto.setAmountAttributedToCoverageGap(value); break;
-                    case "U8": dto.setIngredientCostContractedReimbursableAmount(value); break;
-                    case "U9": dto.setDispensingFeeContractedReimbursableAmount(value); break;
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<ResponsePricingDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromResponsePricingDTO(ResponsePricingDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "F5", dto.getGrossAmountDue());
+            putIfNotNull(values, "F6", dto.getIngredientCostPaid());
+            putIfNotNull(values, "F7", dto.getDispensingFeePaid());
+            putIfNotNull(values, "AV", dto.getTaxExemptIndicator());
+            putIfNotNull(values, "AW", dto.getFlatSalesTaxAmountPaid());
+            putIfNotNull(values, "AX", dto.getPercentageSalesTaxAmountPaid());
+            putIfNotNull(values, "AY", dto.getPercentageSalesTaxRatePaid());
+            putIfNotNull(values, "AZ", dto.getPercentageSalesTaxBasisPaid());
+            putIfNotNull(values, "FL", dto.getIncentiveAmountPaid());
+            putIfNotNull(values, "J1", dto.getProfessionalServiceFeePaid());
+            putIfNotNull(values, "J2", dto.getOtherAmountPaidCount());
+            putIfNotNull(values, "J3", dto.getOtherAmountPaidQualifier());
+            putIfNotNull(values, "J4", dto.getOtherAmountPaid());
+            putIfNotNull(values, "J5", dto.getOtherPayerAmountRecognized());
+            putIfNotNull(values, "F9", dto.getTotalAmountPaid());
+            putIfNotNull(values, "FM", dto.getBasisOfReimbursementDetermination());
+            putIfNotNull(values, "FN", dto.getAmountAttributedToSalesTax());
+            putIfNotNull(values, "FC", dto.getAccumulatedDeductibleAmount());
+            putIfNotNull(values, "FD", dto.getRemainingDeductibleAmount());
+            putIfNotNull(values, "FE", dto.getRemainingBenefitAmount());
+            putIfNotNull(values, "FH", dto.getAmountAppliedToPeriodicDeductible());
+            putIfNotNull(values, "FI", dto.getAmountOfCopay());
+            putIfNotNull(values, "FK", dto.getAmountExceedingPeriodicBenefitMaximum());
+            putIfNotNull(values, "HH", dto.getBasisOfCalculationDispensingFee());
+            putIfNotNull(values, "HJ", dto.getBasisOfCalculationCopay());
+            putIfNotNull(values, "HK", dto.getBasisOfCalculationFlatSalesTax());
+            putIfNotNull(values, "HM", dto.getBasisOfCalculationPercentageSalesTax());
+            putIfNotNull(values, "NZ", dto.getAmountAttributedToProcessorFee());
+            putIfNotNull(values, "EQ", dto.getPatientSalesTaxAmount());
+            putIfNotNull(values, "2Y", dto.getPlanSalesTaxAmount());
+            putIfNotNull(values, "4U", dto.getAmountOfCoinsurance());
+            putIfNotNull(values, "4V", dto.getBasisOfCalculationCoinsurance());
+            putIfNotNull(values, "MU", dto.getBenefitStageCount());
+            putIfNotNull(values, "MV", dto.getBenefitStageQualifier());
+            putIfNotNull(values, "MW", dto.getBenefitStageAmount());
+            putIfNotNull(values, "G3", dto.getEstimatedGenericSavings());
+            putIfNotNull(values, "UC", dto.getSpendingAccountAmountRemaining());
+            putIfNotNull(values, "UD", dto.getHealthPlanFundedAssistanceAmount());
+            putIfNotNull(values, "UJ", dto.getAmountAttributedToProviderNetworkSelection());
+            putIfNotNull(values, "UK", dto.getAmountAttributedToProductSelectionBrandDrug());
+            putIfNotNull(values, "UM", dto.getAmountAttributedToProductSelectionNonPreferredFormularySelection());
+            putIfNotNull(values, "UN", dto.getAmountAttributedToProductSelectionBrandNonPreferredFormularySelection());
+            putIfNotNull(values, "UP", dto.getAmountAttributedToCoverageGap());
+            putIfNotNull(values, "U8", dto.getIngredientCostContractedReimbursableAmount());
+            putIfNotNull(values, "U9", dto.getDispensingFeeContractedReimbursableAmount());
         }
     }
 }

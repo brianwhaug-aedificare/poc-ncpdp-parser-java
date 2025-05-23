@@ -1,6 +1,7 @@
 package poc.ncpdp.parser.segments;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.ResponseClaimDTO;
@@ -12,6 +13,11 @@ public class ResponseClaim extends SegmentBase {
     public ResponseClaim() {
         super();
         this.responseClaimDTO = new ResponseClaimDTO();
+    }
+
+    public ResponseClaim(ResponseClaimDTO responseClaimDTO) {
+        super();
+        this.responseClaimDTO = responseClaimDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -34,22 +40,48 @@ public class ResponseClaim extends SegmentBase {
         return this.responseClaimDTO;
     }
 
-    private class ResponseClaimMapper {
-        public void updateResponseClaimDTOFromMap(Map<String, Object> values, ResponseClaimDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "EM": dto.setPrescriptionReferenceNumberQualifier(value); break;
-                    case "D2": dto.setPrescriptionReferenceNumber(value); break;
-                    case "9F": dto.setPreferredProductCount(value); break;
-                    case "AP": dto.setPreferredProductIdQualifier(value); break;
-                    case "AR": dto.setPreferredProductId(value); break;
-                    case "AS": dto.setPreferredProductIncentive(value); break;
-                    case "AT": dto.setPreferredProductCostShareIncentive(value); break;
-                    case "AU": dto.setPreferredProductDescription(value); break;
-                    case "N4": dto.setMedicadeIcn(value); break;
-                }
-            }
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromResponseClaimDTO(responseClaimDTO, values);
+        return values;
+    }
+
+    private static class ResponseClaimMapper {
+        private static final java.util.Map<String, java.util.function.BiConsumer<ResponseClaimDTO, String>> FIELD_SETTERS;
+        static {
+            FIELD_SETTERS = new java.util.HashMap<>();
+            FIELD_SETTERS.put("EM", ResponseClaimDTO::setPrescriptionReferenceNumberQualifier);
+            FIELD_SETTERS.put("D2", ResponseClaimDTO::setPrescriptionReferenceNumber);
+            FIELD_SETTERS.put("9F", ResponseClaimDTO::setPreferredProductCount);
+            FIELD_SETTERS.put("AP", ResponseClaimDTO::setPreferredProductIdQualifier);
+            FIELD_SETTERS.put("AR", ResponseClaimDTO::setPreferredProductId);
+            FIELD_SETTERS.put("AS", ResponseClaimDTO::setPreferredProductIncentive);
+            FIELD_SETTERS.put("AT", ResponseClaimDTO::setPreferredProductCostShareIncentive);
+            FIELD_SETTERS.put("AU", ResponseClaimDTO::setPreferredProductDescription);
+            FIELD_SETTERS.put("N4", ResponseClaimDTO::setMedicadeIcn);
         }
+
+        public void updateResponseClaimDTOFromMap(Map<String, Object> values, ResponseClaimDTO dto) {
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<ResponseClaimDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
+                }
+            });
+        }
+
+        public void updateMapFromResponseClaimDTO(ResponseClaimDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "EM", dto.getPrescriptionReferenceNumberQualifier());
+            putIfNotNull(values, "D2", dto.getPrescriptionReferenceNumber());
+            putIfNotNull(values, "9F", dto.getPreferredProductCount());
+            putIfNotNull(values, "AP", dto.getPreferredProductIdQualifier());
+            putIfNotNull(values, "AR", dto.getPreferredProductId());
+            putIfNotNull(values, "AS", dto.getPreferredProductIncentive());
+            putIfNotNull(values, "AT", dto.getPreferredProductCostShareIncentive());
+            putIfNotNull(values, "AU", dto.getPreferredProductDescription());
+            putIfNotNull(values, "N4", dto.getMedicadeIcn());
+        }
+        
     }
 }

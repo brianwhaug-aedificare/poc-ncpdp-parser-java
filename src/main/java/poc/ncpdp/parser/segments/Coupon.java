@@ -2,7 +2,9 @@ package poc.ncpdp.parser.segments;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import poc.ncpdp.data.segments.CouponDTO;
 
@@ -15,6 +17,11 @@ public class Coupon extends SegmentBase {
         this.couponDTO = new CouponDTO();
     }
 
+    public Coupon(CouponDTO couponDTO) {
+        super();
+        this.couponDTO = couponDTO;
+    }
+
     public static Map<String, String> fieldIdToSymbol() {
         Map<String, String> map = new HashMap<>(SegmentBase.fieldIdToSymbol());
         map.put("KE", "couponType");
@@ -25,19 +32,37 @@ public class Coupon extends SegmentBase {
 
     public CouponDTO setDTOValues(Map<String, Object> values) {
         mapper.updateCouponDTOFromMap(values, couponDTO);
+        setSegmentIdentification(couponDTO);
         return this.couponDTO;
     }
 
-    private class CouponMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromCouponDTO(couponDTO, values);
+        return values;
+    }
+
+    private static class CouponMapper {
+        private static final Map<String, BiConsumer<CouponDTO, String>> FIELD_SETTERS = Map.of(
+            "KE", CouponDTO::setCouponType,
+            "ME", CouponDTO::setCouponNumber,
+            "NE", CouponDTO::setCouponValueAmount
+        );
+
         public void updateCouponDTOFromMap(Map<String, Object> values, CouponDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "KE": dto.setCouponType(value); break;
-                    case "ME": dto.setCouponNumber(value); break;
-                    case "NE": dto.setCouponValueAmount(value); break;
+            values.forEach((key, value) -> {
+                BiConsumer<CouponDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromCouponDTO(CouponDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "KE", dto.getCouponType());
+            putIfNotNull(values, "ME", dto.getCouponNumber());
+            putIfNotNull(values, "NE", dto.getCouponValueAmount());
         }
     }
 }

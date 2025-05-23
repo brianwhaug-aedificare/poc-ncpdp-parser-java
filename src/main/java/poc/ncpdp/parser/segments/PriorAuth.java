@@ -2,6 +2,7 @@ package poc.ncpdp.parser.segments;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.PriorAuthDTO;
@@ -13,6 +14,11 @@ public class PriorAuth extends SegmentBase {
     public PriorAuth() {
         super();
         this.priorAuthDTO = new PriorAuthDTO();
+    }
+
+    public PriorAuth(PriorAuthDTO priorAuthDTO) {
+        super();
+        this.priorAuthDTO = priorAuthDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -33,21 +39,45 @@ public class PriorAuth extends SegmentBase {
         return this.priorAuthDTO;
     }
 
-    private class PriorAuthMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromPriorAuthDTO(priorAuthDTO, values);
+        return values;
+    }
+
+    private static class PriorAuthMapper {
+        private static final java.util.Map<String, java.util.function.BiConsumer<PriorAuthDTO, String>> FIELD_SETTERS;
+        static {
+            FIELD_SETTERS = new java.util.HashMap<>();
+            FIELD_SETTERS.put("PR", PriorAuthDTO::setPriorAuthorizationProcessedDate);
+            FIELD_SETTERS.put("PS", PriorAuthDTO::setPriorAuthorizationEffectiveDate);
+            FIELD_SETTERS.put("PT", PriorAuthDTO::setPriorAuthorizationExpirationDate);
+            FIELD_SETTERS.put("RA", PriorAuthDTO::setPriorAuthorizationQuantity);
+            FIELD_SETTERS.put("RB", PriorAuthDTO::setPriorAuthorizationDollarsAuthorized);
+            FIELD_SETTERS.put("PW", PriorAuthDTO::setPriorAuthorizationNumberOfRefillsAuthorized);
+            FIELD_SETTERS.put("PX", PriorAuthDTO::setPriorAuthorizationQuantityAccumulated);
+            FIELD_SETTERS.put("PY", PriorAuthDTO::setPriorAuthorizationNumberAssigned);
+        }
+
         public void updatePriorAuthDTOFromMap(Map<String, Object> values, PriorAuthDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "PR": dto.setPriorAuthorizationProcessedDate(value); break;
-                    case "PS": dto.setPriorAuthorizationEffectiveDate(value); break;
-                    case "PT": dto.setPriorAuthorizationExpirationDate(value); break;
-                    case "RA": dto.setPriorAuthorizationQuantity(value); break;
-                    case "RB": dto.setPriorAuthorizationDollarsAuthorized(value); break;
-                    case "PW": dto.setPriorAuthorizationNumberOfRefillsAuthorized(value); break;
-                    case "PX": dto.setPriorAuthorizationQuantityAccumulated(value); break;
-                    case "PY": dto.setPriorAuthorizationNumberAssigned(value); break;
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<PriorAuthDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromPriorAuthDTO(PriorAuthDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "PR", dto.getPriorAuthorizationProcessedDate());
+            putIfNotNull(values, "PS", dto.getPriorAuthorizationEffectiveDate());
+            putIfNotNull(values, "PT", dto.getPriorAuthorizationExpirationDate());
+            putIfNotNull(values, "RA", dto.getPriorAuthorizationQuantity());
+            putIfNotNull(values, "RB", dto.getPriorAuthorizationDollarsAuthorized());
+            putIfNotNull(values, "PW", dto.getPriorAuthorizationNumberOfRefillsAuthorized());
+            putIfNotNull(values, "PX", dto.getPriorAuthorizationQuantityAccumulated());
+            putIfNotNull(values, "PY", dto.getPriorAuthorizationNumberAssigned());
         }
     }
 }

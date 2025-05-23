@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.Data;
-
+import poc.ncpdp.data.transmissions.RequestHeaderDTO;
 import poc.ncpdp.parser.utils.FixedWidth;
 
 @Data
@@ -68,7 +68,36 @@ public class RequestHeader implements TransmissionHeader {
         this.software = (String) header.get(SOFTWARE);
     }
 
+    public RequestHeader(RequestHeaderDTO requestHeaderDTO) {
+        this.binNumber = requestHeaderDTO.getBinNumber();
+        this.version = requestHeaderDTO.getVersion();
+        this.transactionCode = requestHeaderDTO.getTransactionCode();
+        this.processorControlNumber = requestHeaderDTO.getProcessorControlNumber();
+        this.transactionCount = requestHeaderDTO.getTransactionCount();
+        this.serviceProviderIdQualifier = requestHeaderDTO.getServiceProviderIdQualifier();
+        this.serviceProviderId = requestHeaderDTO.getServiceProviderId();
+        this.dateOfService = requestHeaderDTO.getDateOfService();
+        this.software = requestHeaderDTO.getSoftware();
+
+        this.header = new HashMap<>();
+        putIfNotNull(header, BIN_NUMBER, this.binNumber);
+        putIfNotNull(header, VERSION, this.version);
+        putIfNotNull(header, TRANSACTION_CODE, this.transactionCode);
+        putIfNotNull(header, PROCESSOR_CONTROL_NUMBER, this.processorControlNumber);
+        putIfNotNull(header, TRANSACTION_COUNT, this.transactionCount);
+        putIfNotNull(header, SERVICE_PROVIDER_ID_QUALIFIER, this.serviceProviderIdQualifier);
+        putIfNotNull(header, SERVICE_PROVIDER_ID, this.serviceProviderId);
+        putIfNotNull(header, DATE_OF_SERVICE, this.dateOfService);
+        putIfNotNull(header, SOFTWARE, this.software);
+    }
+
     public Map<String, Object> getHeader() {
         return header;
+    }
+
+    protected static void putIfNotNull(Map<String, Object> map, String key, Object value) {
+        if (value != null) {
+            map.put(key, value);
+        }
     }
 }

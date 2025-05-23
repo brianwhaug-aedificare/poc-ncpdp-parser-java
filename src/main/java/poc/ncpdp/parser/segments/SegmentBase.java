@@ -11,7 +11,7 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
     private static final String SEGMENT_IDENTIFICATION = "AM";
     protected static final Map<String, String> segmentIdToSymbol = new HashMap<>();
     protected static final Map<String, Class<? extends SegmentBase>> segmentIdToKlass = new HashMap<>();
-    
+
     protected final Map<String, Object> hash;
 
     public SegmentBase() {
@@ -75,21 +75,29 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
             parsedFields = Parser.parse(raw);
             givenIdentifier = parsedFields.get(SEGMENT_IDENTIFICATION);
         }
-  
+
         Class<? extends SegmentBase> segmentKlass = segmentIdToKlass.get(givenIdentifier);
         if (segmentKlass != null) {
             try {
-                // Just create a new instance and use merge instead of trying to use constructor directly
+                // Just create a new instance and use merge instead of trying to use constructor
+                // directly
                 SegmentBase instance = segmentKlass.getDeclaredConstructor().newInstance();
                 instance.merge(parsedFields);
                 return instance;
             } catch (ReflectiveOperationException e) {
                 // More specific exception handling
                 System.err.println("Failed to create instance of " + segmentKlass.getName() + ": " + e.getMessage());
-                throw new RuntimeException("Failed to create instance of: " + segmentKlass.getName() + ": " + e.getMessage());
+                throw new RuntimeException(
+                        "Failed to create instance of: " + segmentKlass.getName() + ": " + e.getMessage());
             }
         } else {
             throw new RuntimeException("No segment class found for identifier: " + givenIdentifier);
+        }
+    }
+
+    protected static void putIfNotNull(Map<String, Object> map, String key, Object value) {
+        if (value != null) {
+            map.put(key, value);
         }
     }
 
@@ -126,5 +134,9 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
         if (segmentId != null) {
             segmentDTO.setSegmentIdentification(segmentId);
         }
+    }
+
+    public static void setSegmentIdentification(Map<String, Object> values, String segmentId) {
+        values.put(SEGMENT_IDENTIFICATION, segmentId);
     }
 }

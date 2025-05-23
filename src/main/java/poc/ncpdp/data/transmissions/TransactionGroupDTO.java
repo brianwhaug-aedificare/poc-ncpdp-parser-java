@@ -10,4 +10,8 @@ public class TransactionGroupDTO {
     public TransactionGroupDTO(List<SegmentDTO> segments) {
         this.segments = segments;
     }
+
+    public List<SegmentDTO> getSegments() {
+        return segments;
+    }
 }

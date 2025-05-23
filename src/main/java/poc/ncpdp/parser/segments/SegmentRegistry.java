@@ -37,4 +37,6 @@ public class SegmentRegistry {
         SegmentBase.registerSegment(ResponsePatient.class, "29");
         
     }
+
+    
 }

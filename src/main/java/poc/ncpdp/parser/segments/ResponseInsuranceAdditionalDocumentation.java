@@ -1,6 +1,7 @@
 package poc.ncpdp.parser.segments;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import poc.ncpdp.data.segments.ResponseInsuranceAdditionalDocumentationDTO;
@@ -12,6 +13,11 @@ public class ResponseInsuranceAdditionalDocumentation extends SegmentBase {
     public ResponseInsuranceAdditionalDocumentation() {
         super();
         this.responseInsuranceAdditionalDocumentationDTO = new ResponseInsuranceAdditionalDocumentationDTO();
+    }
+
+    public ResponseInsuranceAdditionalDocumentation(ResponseInsuranceAdditionalDocumentationDTO responseInsuranceAdditionalDocumentationDTO) {
+        super();
+        this.responseInsuranceAdditionalDocumentationDTO = responseInsuranceAdditionalDocumentationDTO;
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -32,20 +38,41 @@ public class ResponseInsuranceAdditionalDocumentation extends SegmentBase {
         return this.responseInsuranceAdditionalDocumentationDTO;
     }
 
-    private class ResponseInsuranceAdditionalDocumentationMapper {
+    public Map<String, Object> getDTOValues() {
+        Map<String, Object> values = new LinkedHashMap<>();
+        mapper.updateMapFromResponseInsuranceAdditionalDocumentationDTO(responseInsuranceAdditionalDocumentationDTO, values);
+        return values;
+    }
+
+    private static class ResponseInsuranceAdditionalDocumentationMapper {
+        private static final Map<String, java.util.function.BiConsumer<ResponseInsuranceAdditionalDocumentationDTO, String>> FIELD_SETTERS = Map.of(
+            "UR", ResponseInsuranceAdditionalDocumentationDTO::setMedicarePartDCoverageCode,
+            "UQ", ResponseInsuranceAdditionalDocumentationDTO::setCmsLowIncomeCostSharingLicsLevel,
+            "U1", ResponseInsuranceAdditionalDocumentationDTO::setContractNumber,
+            "FF", ResponseInsuranceAdditionalDocumentationDTO::setFormularyId,
+            "U6", ResponseInsuranceAdditionalDocumentationDTO::setBenefitId,
+            "US", ResponseInsuranceAdditionalDocumentationDTO::setNextMedicarePartDEffectiveDate,
+            "UT", ResponseInsuranceAdditionalDocumentationDTO::setNextMedicarePartDTerminationDate
+        );
+
         public void updateResponseInsuranceAdditionalDocumentationDTOFromMap(Map<String, Object> values, ResponseInsuranceAdditionalDocumentationDTO dto) {
-            for (Map.Entry<String, Object> entry : values.entrySet()) {
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
-                switch (entry.getKey()) {
-                    case "UR": dto.setMedicarePartDCoverageCode(value); break;
-                    case "UQ": dto.setCmsLowIncomeCostSharingLicsLevel(value); break;
-                    case "U1": dto.setContractNumber(value); break;
-                    case "FF": dto.setFormularyId(value); break;
-                    case "U6": dto.setBenefitId(value); break;
-                    case "US": dto.setNextMedicarePartDEffectiveDate(value); break;
-                    case "UT": dto.setNextMedicarePartDTerminationDate(value); break;
+            values.forEach((key, value) -> {
+                java.util.function.BiConsumer<ResponseInsuranceAdditionalDocumentationDTO, String> setter = FIELD_SETTERS.get(key);
+                if (setter != null) {
+                    setter.accept(dto, value != null ? value.toString() : null);
                 }
-            }
+            });
+        }
+
+        public void updateMapFromResponseInsuranceAdditionalDocumentationDTO(ResponseInsuranceAdditionalDocumentationDTO dto, Map<String, Object> values) {
+            SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
+            putIfNotNull(values, "UR", dto.getMedicarePartDCoverageCode());
+            putIfNotNull(values, "UQ", dto.getCmsLowIncomeCostSharingLicsLevel());
+            putIfNotNull(values, "U1", dto.getContractNumber());
+            putIfNotNull(values, "FF", dto.getFormularyId());
+            putIfNotNull(values, "U6", dto.getBenefitId());
+            putIfNotNull(values, "US", dto.getNextMedicarePartDEffectiveDate());
+            putIfNotNull(values, "UT", dto.getNextMedicarePartDTerminationDate());
         }
     }
 }

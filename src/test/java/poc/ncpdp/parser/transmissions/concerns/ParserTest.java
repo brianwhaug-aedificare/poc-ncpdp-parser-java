@@ -270,4 +270,36 @@ public class ParserTest {
         assertEquals("20070915", header.getDateOfService());
         
     }
+
+    @Test
+    public void testBuild_B1_01_BillingRequest_UsingDTO() throws IOException {
+        // Read and process the test file
+        String requestContent = ParserTestHelper.readTestFile("request_b1_billing_01.txt");
+
+        // Parse the request
+        RequestDTO requestDTO = Parser.parseRequestIntoDTO(requestContent);
+
+        String rawRequest = Builder.buildRequest(requestDTO);
+
+        // check length of requestContent should match rawRequest
+        assertEquals("Request content length should match raw request", requestContent.length(), rawRequest.length());
+        assertEquals("Request content should match raw request", requestContent, rawRequest);
+        
+    }
+    
+    @Test
+    public void testBuild_B1_02_BillingRequest_UsingDTO() throws IOException {
+        // Read and process the test file
+        String requestContent = ParserTestHelper.readTestFile("request_b1_billing_02.txt");
+
+        // Parse the request
+        RequestDTO requestDTO = Parser.parseRequestIntoDTO(requestContent);
+
+        String rawRequest = Builder.buildRequest(requestDTO);
+
+        // check length of requestContent should match rawRequest
+        assertEquals("Request content length should match raw request", requestContent.length(), rawRequest.length());
+        assertEquals("Request content should match raw request", requestContent, rawRequest);
+        
+    }
 }

@@ -12,8 +12,7 @@ public class TransmissionGroup extends GroupBase {
         super(segments, dtos);
     }
 
-    @Override
-    public String toString() {
+    public String toNCPDPString() {
         String result = segments.stream().map(Object::toString).collect(Collectors.joining());
         if (result.endsWith(Constants.SEGMENT_SEPARATOR)) {
             result = result.substring(0, result.length() - Constants.SEGMENT_SEPARATOR.length());
