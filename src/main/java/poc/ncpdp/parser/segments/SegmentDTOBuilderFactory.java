@@ -8,7 +8,7 @@ public class SegmentDTOBuilderFactory {
         try {
             // Find a constructor that takes the DTO as an argument
             String segmentIndification = segmentDTO.getSegmentIdentification();
-            Class<? extends SegmentDTOBuilder> builderClass = SegmentBase.segmentIdToKlass.get(segmentIndification);
+            Class<? extends SegmentDTOBuilder> builderClass = SegmentRegistry.segmentIdToKlass.get(segmentIndification);
             if (builderClass == null) {
                 throw new IllegalArgumentException("No builder class found for segment identification: " + segmentIndification);
             }

@@ -9,9 +9,7 @@ import java.util.Objects;
 
 public abstract class SegmentBase implements SegmentDTOBuilder {
     private static final String SEGMENT_IDENTIFICATION = "AM";
-    protected static final Map<String, String> segmentIdToSymbol = new HashMap<>();
-    protected static final Map<String, Class<? extends SegmentBase>> segmentIdToKlass = new HashMap<>();
-
+   
     protected final Map<String, Object> hash;
 
     public SegmentBase() {
@@ -23,11 +21,6 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
         if (initialHash != null) {
             this.hash.putAll(initialHash);
         }
-    }
-
-    public static void registerSegment(Class<? extends SegmentBase> klass, String identifier) {
-        segmentIdToKlass.put(identifier, klass);
-        segmentIdToSymbol.put(identifier, getSymbol(klass));
     }
 
     public static Map<String, String> fieldIdToSymbol() {
@@ -49,21 +42,6 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
         return fieldIdToSymbol().get(field);
     }
 
-    public static Class<? extends SegmentBase> getKlassBySymbol(String sym) {
-        String identifier = null;
-        for (Map.Entry<String, String> entry : segmentIdToSymbol.entrySet()) {
-            if (Objects.equals(entry.getValue(), sym)) {
-                identifier = entry.getKey();
-                break;
-            }
-        }
-        return getKlassByIdentifier(identifier);
-    }
-
-    public static Class<? extends SegmentBase> getKlassByIdentifier(String identifier) {
-        return segmentIdToKlass.getOrDefault(identifier, SegmentBase.class);
-    }
-
     public static SegmentBase build(Map<String, Object> initialHash) {
         // Get raw string value which contains the segment data
         String raw = (String) initialHash.get("raw");
@@ -76,7 +54,7 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
             givenIdentifier = parsedFields.get(SEGMENT_IDENTIFICATION);
         }
 
-        Class<? extends SegmentBase> segmentKlass = segmentIdToKlass.get(givenIdentifier);
+        Class<? extends SegmentBase> segmentKlass = SegmentRegistry.segmentIdToKlass(givenIdentifier);
         if (segmentKlass != null) {
             try {
                 // Just create a new instance and use merge instead of trying to use constructor
@@ -124,18 +102,15 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
         return Collections.unmodifiableMap(hash);
     }
 
-    public static String getSymbol(Class<?> klass) {
-        String name = klass.getSimpleName();
-        return name.replaceAll("([a-z])([A-Z]+)", "$1_$2").toLowerCase();
-    }
-
+    // sets the segment identification in the DTO
     public void setSegmentIdentification(SegmentDTO segmentDTO) {
         String segmentId = (String) hash.get(SEGMENT_IDENTIFICATION);
         if (segmentId != null) {
             segmentDTO.setSegmentIdentification(segmentId);
         }
     }
-
+    
+    // adds the segment identification to the map
     public static void setSegmentIdentification(Map<String, Object> values, String segmentId) {
         values.put(SEGMENT_IDENTIFICATION, segmentId);
     }

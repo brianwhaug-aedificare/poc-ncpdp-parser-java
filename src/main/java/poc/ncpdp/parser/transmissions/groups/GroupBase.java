@@ -1,6 +1,7 @@
 package poc.ncpdp.parser.transmissions.groups;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,7 +10,6 @@ import poc.ncpdp.data.segments.SegmentDTO;
 import poc.ncpdp.parser.Constants;
 import poc.ncpdp.parser.segments.SegmentBase;
 import poc.ncpdp.parser.segments.SegmentDTOBuilder;
-import poc.ncpdp.parser.segments.SegmentRegistry;
 
 public class GroupBase {
     protected final List<SegmentBase> segments;
@@ -24,22 +24,17 @@ public class GroupBase {
         String[] rawSegments = string.split(segmentSeparator);
         List<SegmentBase> segments = new ArrayList<>();
         List<SegmentDTO> segmentDTOs = new ArrayList<>();
-        
-        // might not be the best place to initialize all segments
-        // but it is the only place where we know all segments are present
-        // and we need to initialize them before parsing
-        SegmentRegistry.initializeAllSegments();
-        
-        for (String rawSegment : rawSegments) {
-            if (!rawSegment.trim().isEmpty()) {
-                SegmentBase segment = SegmentBase.build(Map.of("raw", rawSegment));
-                SegmentDTOBuilder builder = (SegmentDTOBuilder) segment;
-                SegmentDTO dto = builder.setDTOValues(segment.getHash());
 
-                segments.add(segment);
-                segmentDTOs.add(dto);
-            }
-        }
+        Arrays.stream(rawSegments)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .forEach(rawSegment -> {
+                    SegmentBase segment = SegmentBase.build(Map.of("raw", rawSegment));
+                    SegmentDTOBuilder builder = (SegmentDTOBuilder) segment;
+                    SegmentDTO dto = builder.setDTOValues(segment.getHash());
+                    segments.add(segment);
+                    segmentDTOs.add(dto);
+                });
         return new GroupBase(segments, segmentDTOs);
     }
 
@@ -67,12 +62,11 @@ public class GroupBase {
     public Map<String, Object> toJson(boolean keyGroupBySegmentSym) {
         if (keyGroupBySegmentSym) {
             return segments.stream()
-                .filter(s -> s != null)
-                .collect(Collectors.toMap(
-                    s -> s.getClass().getSimpleName(),
-                    SegmentBase::getHash,
-                    (a, b) -> b
-                ));
+                    .filter(s -> s != null)
+                    .collect(Collectors.toMap(
+                            s -> s.getClass().getSimpleName(),
+                            SegmentBase::getHash,
+                            (a, b) -> b));
         } else {
             return Map.of("segments", segments.stream().map(SegmentBase::getHash).collect(Collectors.toList()));
         }
