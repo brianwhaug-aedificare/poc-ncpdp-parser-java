@@ -80,24 +80,18 @@ public class RequestHeader implements TransmissionHeader {
         this.software = requestHeaderDTO.getSoftware();
 
         this.header = new HashMap<>();
-        putIfNotNull(header, BIN_NUMBER, this.binNumber);
-        putIfNotNull(header, VERSION, this.version);
-        putIfNotNull(header, TRANSACTION_CODE, this.transactionCode);
-        putIfNotNull(header, PROCESSOR_CONTROL_NUMBER, this.processorControlNumber);
-        putIfNotNull(header, TRANSACTION_COUNT, this.transactionCount);
-        putIfNotNull(header, SERVICE_PROVIDER_ID_QUALIFIER, this.serviceProviderIdQualifier);
-        putIfNotNull(header, SERVICE_PROVIDER_ID, this.serviceProviderId);
-        putIfNotNull(header, DATE_OF_SERVICE, this.dateOfService);
-        putIfNotNull(header, SOFTWARE, this.software);
+        header.put(BIN_NUMBER, this.binNumber);
+        header.put(VERSION, this.version);
+        header.put(TRANSACTION_CODE, this.transactionCode);
+        header.put(PROCESSOR_CONTROL_NUMBER, this.processorControlNumber);
+        header.put(TRANSACTION_COUNT, this.transactionCount);
+        header.put(SERVICE_PROVIDER_ID_QUALIFIER, this.serviceProviderIdQualifier);
+        header.put(SERVICE_PROVIDER_ID, this.serviceProviderId);
+        header.put(DATE_OF_SERVICE, this.dateOfService);
+        header.put(SOFTWARE, this.software);
     }
 
     public Map<String, Object> getHeader() {
         return header;
-    }
-
-    protected static void putIfNotNull(Map<String, Object> map, String key, Object value) {
-        if (value != null) {
-            map.put(key, value);
-        }
     }
 }

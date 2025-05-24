@@ -1,5 +1,6 @@
 package poc.ncpdp.parser.transmissions;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -67,6 +68,7 @@ public class ResponseHeader implements TransmissionHeader {
         this.serviceProviderId = headerDTO.getServiceProviderId();
         this.dateOfService = headerDTO.getDateOfService();
 
+        this.header = new HashMap<>();
         header.put(VERSION, this.version);
         header.put(TRANSACTION_CODE, this.transactionCode);
         header.put(TRANSACTION_COUNT, this.transactionCount);

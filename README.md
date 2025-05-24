@@ -34,3 +34,60 @@ The main entry point for interacting with this library is the `Parser` class. Th
 
 - **ResponseDTO**:  
   Use `Parser.parseResponseIntoDTO(String rawContent)` to parse a response file and get a `ResponseDTO` object, which is a simplified, serializable representation suitable for APIs or external systems.
+
+## NCPDP Syntax
+
+    ![NCPDP Transmission General Syntax](docs/ncpdp/diagrams/transmission_general_syntax.png)
+
+### ORDER OF SEGMENTS
+At the Transmission request level, the Transaction Header Segment must appear first. The Patient Segment and Insurance Segment can be
+submitted in either order, if both appear, regardless of whether they are mandatory, situational, or optional segments. At the Transaction
+request level, the Group Separator occurs, and then the other segments may occur in any order. Note the Segments must occur only once
+and according to the rules for that transaction.
+
+At the Transmission response level, the Response Header Segment must appear first. The Response Message Segment and Response
+Insurance Segment may occur in either order, if both appear, regardless of whether they are mandatory, situational, or optional segments. At
+the Transaction response level, the Group Separator occurs, and then the Response Status Segment through Response Coordination of
+Benefits/Other Payers Segment may occur in any order. Note the Segments must occur only once and according to the rules for that
+transaction.
+
+The receiver must not force an order of segments.
+The general structure of a request, for most transactions, will appear as follows (recognizing that some segments may not be used for a given
+transaction):
+- Transmission
+- Header Segment
+- Patient Segment
+- Insurance Segment
+- Transactions (up to four per transmission)
+- Claim Segment
+- Pharmacy Provider Segment
+- Prescriber Segment
+- Coordination of Benefits/Other Payments Segment
+- Workers’ Compensation Segment
+- DUR/PPS Segment
+- Pricing Segment
+- Coupon Segment
+- Compound Segment
+- Prior Authorization Segment
+- Clinical Segment
+- Additional Documentation Segment
+- Facility Segment
+- Narrative Segment
+
+The general structure of a response, for most transactions, will appear as follows (recognizing that some segments may not be used for a
+given transaction):
+
+- Response
+- Response Header Segment
+- Response Message Segment
+- Response Insurance Segment
+- Transaction Response (up to four per transmission)
+- Response Status Segment
+- Response Claim Segment
+- Response Pricing Segment
+- Response DUR/PPS Segment
+- Response Prior Authorization Segment
+- Response Coordination of Benefits/Other Payers Segment
+
+### More Details
+Refer to Chapter ```33. STANDARD CONVENTIONS``` of the Telecommunications Implmentation Guide for more details on structure and conventions used in the standard. 

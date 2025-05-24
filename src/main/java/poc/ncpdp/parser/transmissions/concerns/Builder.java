@@ -1,16 +1,25 @@
 package poc.ncpdp.parser.transmissions.concerns;
 
+import java.util.List;
 import java.util.Map;
 
 import poc.ncpdp.data.transmissions.RequestDTO;
+import poc.ncpdp.data.transmissions.ResponseDTO;
+import poc.ncpdp.data.transmissions.TransactionGroupDTO;
 import poc.ncpdp.data.transmissions.TransmissionGroupDTO;
 import poc.ncpdp.parser.Constants;
 import poc.ncpdp.parser.segments.SegmentDTOBuilder;
 import poc.ncpdp.parser.segments.SegmentDTOBuilderFactory;
 import poc.ncpdp.parser.segments.concerns.SegmentBuilder;
 import poc.ncpdp.parser.transmissions.RequestHeader;
+import poc.ncpdp.parser.transmissions.ResponseHeader;
 import poc.ncpdp.parser.utils.FixedWidth;
 
+/**
+ * Builds request and response transmission strings for NCPDP.
+ *
+ * <p>See: docs/ncpdp/diagrams/transmission_general_syntax.png for the general transmission syntax diagram.
+ */
 public interface Builder {
     /**
      * Builds a request transmission string as an ASCII (7 bit) by
@@ -19,58 +28,73 @@ public interface Builder {
      */
     static String buildRequest(RequestDTO request) {
         StringBuilder sb = new StringBuilder();
-        SegmentDTOBuilder builder;
 
-        // build header
         RequestHeader header = new RequestHeader(request.getRequestHeader());
         sb.append(FixedWidth.toFixedWidth(header.getHeader(), RequestHeader.getHeaderSchema()));
         sb.append(Constants.SEGMENT_SEPARATOR);
 
-        // build transmission group
-        TransmissionGroupDTO transmissionGroup = request.getTransmissionGroup();
-        StringBuilder transmission = new StringBuilder();
+        sb.append(buildTransmission(request.getTransmissionGroup()));
+        sb.append(buildTransactions(request.getTransactionGroups()));
+
+        return sb.toString();
+    }
+
+    static String buildResponse(ResponseDTO response) {
+        StringBuilder sb = new StringBuilder();
+
+        ResponseHeader header = new ResponseHeader(response.getResponseHeader());
+        sb.append(FixedWidth.toFixedWidth(header.getHeader(), ResponseHeader.getHeaderSchema()));
+        sb.append(Constants.SEGMENT_SEPARATOR);
+
+        sb.append(buildTransmission(response.getTransmissionGroup()));
+        sb.append(buildTransactions(response.getTransactionGroups()));
+
+        return sb.toString();
+    }
+
+    private static String buildTransmission(TransmissionGroupDTO transmissionGroup) {
+        StringBuilder sb = new StringBuilder();
         for (var transmissiongSegmentDTO : transmissionGroup.getSegments()) {
             // Find the correct builder for the segment type
-            builder = SegmentDTOBuilderFactory.getBuilder(transmissiongSegmentDTO);
+            SegmentDTOBuilder builder = SegmentDTOBuilderFactory.getBuilder(transmissiongSegmentDTO);
             if (builder != null) {
                 // populates the Domain object with the DTO values
                 Map<String, Object> values = builder.getDTOValues();
                 String segmentString = SegmentBuilder.buildSegment(values);
-                System.out.println("Builder Segment String: " + segmentString);
-                transmission.append(segmentString);
+                sb.append(segmentString);
             } else {
                 throw new IllegalArgumentException(
                         "No builder found for segment: " + transmissiongSegmentDTO.getClass().getSimpleName());
             }
         }
-        String result = transmission.toString();
-        if (result.endsWith(Constants.SEGMENT_SEPARATOR)) {
-            result = result.substring(0, result.length() - Constants.SEGMENT_SEPARATOR.length());
-        }
-        sb.append(result);
+        // Remove trailing segment separator if present
+        return removeTrailingSegmentSeparator(sb.toString());
+    }
 
-        // Build transaction groups
-        for (var transactionGroup : request.getTransactionGroups()) {
+    private static String buildTransactions(List<TransactionGroupDTO> transactionGroups) {
+        StringBuilder sb = new StringBuilder();
+        for (var transactionGroup : transactionGroups) {
             sb.append(Constants.GROUP_SEPARATOR);
             sb.append(Constants.SEGMENT_SEPARATOR);
             for (var transactionSegmentDTO : transactionGroup.getSegments()) {
                 // Find the correct builder for the segment type
-                builder = SegmentDTOBuilderFactory.getBuilder(transactionSegmentDTO);
-                StringBuilder transaction = new StringBuilder();
+                SegmentDTOBuilder builder = SegmentDTOBuilderFactory.getBuilder(transactionSegmentDTO);
                 if (builder != null) {
                     // populates the Domain object with the DTO values
                     Map<String, Object> values = builder.getDTOValues();
                     String segmentString = SegmentBuilder.buildSegment(values);
-                    System.out.println("Builder Segment String: " + segmentString);
-                    transaction.append(segmentString);
+                    sb.append(segmentString);
                 } else {
                     throw new IllegalArgumentException(
                             "No builder found for segment: " + transactionSegmentDTO.getClass().getSimpleName());
                 }
-                sb.append(transaction.toString());
             }
         }
-        result = sb.toString();
+        // Remove trailing segment separator if present
+        return removeTrailingSegmentSeparator(sb.toString());
+    }
+
+    private static String removeTrailingSegmentSeparator(String result) {
         if (result.endsWith(Constants.SEGMENT_SEPARATOR)) {
             result = result.substring(0, result.length() - Constants.SEGMENT_SEPARATOR.length());
         }
