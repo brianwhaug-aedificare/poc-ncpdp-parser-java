@@ -35,9 +35,22 @@ The main entry point for interacting with this library is the `Parser` class. Th
 - **ResponseDTO**:  
   Use `Parser.parseResponseIntoDTO(String rawContent)` to parse a response file and get a `ResponseDTO` object, which is a simplified, serializable representation suitable for APIs or external systems.
 
+## Using the Builder
+The `Builder` interface provides static utility methods for constructing NCPDP transmission strings from DTO objects. These methods are useful when you need to serialize structured Java objects back into the NCPDP transmission format.
+
+### Public Methods
+
+- **`Builder.buildRequest(RequestDTO request)`**  
+  Builds a request transmission string in ASCII (7-bit) encoding from a `RequestDTO` object. This includes formatting the request header, transmission group, and transaction groups according to the NCPDP standard.
+
+- **`Builder.buildResponse(ResponseDTO response)`**  
+  Builds a response transmission string in ASCII (7-bit) encoding from a `ResponseDTO` object. This includes formatting the response header, transmission group, and transaction groups according to the NCPDP standard.
+
+Both methods ensure the correct order and formatting of segments and groups as required by the NCPDP Telecommunication Standard. If a segment builder cannot be found for a DTO, an `IllegalArgumentException` is thrown.
+
 ## NCPDP Syntax
 
-    ![NCPDP Transmission General Syntax](docs/ncpdp/diagrams/transmission_general_syntax.png)
+![NCPDP Transmission General Syntax](docs/ncpdp/diagrams/transmission_general_syntax.png)
 
 ### ORDER OF SEGMENTS
 At the Transmission request level, the Transaction Header Segment must appear first. The Patient Segment and Insurance Segment can be
