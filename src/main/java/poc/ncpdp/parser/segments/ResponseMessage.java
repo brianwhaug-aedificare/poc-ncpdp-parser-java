@@ -44,6 +44,10 @@ public class ResponseMessage extends SegmentBase {
             "F4", ResponseMessageDTO::setMessage
         );
 
+        private static final Map<String, java.util.function.Function<ResponseMessageDTO, Object>> FIELD_GETTERS = Map.of(
+            "F4", ResponseMessageDTO::getMessage
+        );
+
         public void updateResponseMessageDTOFromMap(Map<String, Object> values, ResponseMessageDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<ResponseMessageDTO, String> setter = FIELD_SETTERS.get(key);
@@ -55,7 +59,12 @@ public class ResponseMessage extends SegmentBase {
 
         public void updateMapFromResponseMessageDTO(ResponseMessageDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "F4", dto.getMessage());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

@@ -83,6 +83,30 @@ public class Insurance extends SegmentBase {
             FIELD_SETTERS.put("N6", InsuranceDTO::setMedicaidAgencyNumber);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<InsuranceDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("C2", InsuranceDTO::getCardholderId);
+            FIELD_GETTERS.put("CC", InsuranceDTO::getCardholderFirstName);
+            FIELD_GETTERS.put("CD", InsuranceDTO::getCardholderLastName);
+            FIELD_GETTERS.put("CE", InsuranceDTO::getHomePlan);
+            FIELD_GETTERS.put("FO", InsuranceDTO::getPlanId);
+            FIELD_GETTERS.put("C9", InsuranceDTO::getEligibilityClarificationCode);
+            FIELD_GETTERS.put("C1", InsuranceDTO::getGroupId);
+            FIELD_GETTERS.put("C3", InsuranceDTO::getPersonCode);
+            FIELD_GETTERS.put("C6", InsuranceDTO::getPatientRelationshipCode);
+            FIELD_GETTERS.put("MG", InsuranceDTO::getOtherPayerBinNumber);
+            FIELD_GETTERS.put("MH", InsuranceDTO::getOtherPayerProcessorControlNumber);
+            FIELD_GETTERS.put("NU", InsuranceDTO::getOtherPayerCardholderId);
+            FIELD_GETTERS.put("MJ", InsuranceDTO::getOtherPayerGroupId);
+            FIELD_GETTERS.put("2A", InsuranceDTO::getMedigapId);
+            FIELD_GETTERS.put("2B", InsuranceDTO::getMedicaidIndicator);
+            FIELD_GETTERS.put("2D", InsuranceDTO::getProviderAcceptAssignmentIndicator);
+            FIELD_GETTERS.put("G2", InsuranceDTO::getCmsPartDDefinedQualifiedFacility);
+            FIELD_GETTERS.put("N5", InsuranceDTO::getMedicaidIdNumber);
+            FIELD_GETTERS.put("N6", InsuranceDTO::getMedicaidAgencyNumber);
+        }
+
         public void updateInsuranceDTOFromMap(Map<String, Object> values, InsuranceDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<InsuranceDTO, String> setter = FIELD_SETTERS.get(key);
@@ -94,25 +118,12 @@ public class Insurance extends SegmentBase {
 
         public void updateMapFromInsuranceDTO(InsuranceDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "C2", dto.getCardholderId());
-            putIfNotNull(values, "CC", dto.getCardholderFirstName());
-            putIfNotNull(values, "CD", dto.getCardholderLastName());
-            putIfNotNull(values, "CE", dto.getHomePlan());
-            putIfNotNull(values, "FO", dto.getPlanId());
-            putIfNotNull(values, "C9", dto.getEligibilityClarificationCode());
-            putIfNotNull(values, "C1", dto.getGroupId());
-            putIfNotNull(values, "C3", dto.getPersonCode());
-            putIfNotNull(values, "C6", dto.getPatientRelationshipCode());
-            putIfNotNull(values, "MG", dto.getOtherPayerBinNumber());
-            putIfNotNull(values, "MH", dto.getOtherPayerProcessorControlNumber());
-            putIfNotNull(values, "NU", dto.getOtherPayerCardholderId());
-            putIfNotNull(values, "MJ", dto.getOtherPayerGroupId());
-            putIfNotNull(values, "2A", dto.getMedigapId());
-            putIfNotNull(values, "2B", dto.getMedicaidIndicator());
-            putIfNotNull(values, "2D", dto.getProviderAcceptAssignmentIndicator());
-            putIfNotNull(values, "G2", dto.getCmsPartDDefinedQualifiedFacility());
-            putIfNotNull(values, "N5", dto.getMedicaidIdNumber());
-            putIfNotNull(values, "N6", dto.getMedicaidAgencyNumber());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

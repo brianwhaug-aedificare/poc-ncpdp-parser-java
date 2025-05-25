@@ -65,6 +65,21 @@ public class Compound extends SegmentBase {
             FIELD_SETTERS.put("2H", (dto, v) -> dto.setCompoundIngredientModifierCode(v));
         }
 
+        private static final Map<String, java.util.function.Function<CompoundDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("EF", CompoundDTO::getCompoundDosageFormDescriptionCode);
+            FIELD_GETTERS.put("EG", CompoundDTO::getCompoundDispensingUnitFormIndicator);
+            FIELD_GETTERS.put("EC", CompoundDTO::getCompoundIngredientComponentCount);
+            FIELD_GETTERS.put("RE", CompoundDTO::getCompoundProductIdQualifier);
+            FIELD_GETTERS.put("TE", CompoundDTO::getCompoundProductId);
+            FIELD_GETTERS.put("ED", CompoundDTO::getCompoundIngredientQuantity);
+            FIELD_GETTERS.put("EE", CompoundDTO::getCompoundIngredientDrugCost);
+            FIELD_GETTERS.put("UE", CompoundDTO::getCompoundIngredientBasisOfCostDetermination);
+            FIELD_GETTERS.put("2G", CompoundDTO::getCompoundIngredientModifierCodeCount);
+            FIELD_GETTERS.put("2H", CompoundDTO::getCompoundIngredientModifierCode);
+        }
+
         public void updateCompoundDTOFromMap(Map<String, Object> values, CompoundDTO dto) {
             values.forEach((key, value) -> {
                 BiConsumer<CompoundDTO, String> setter = FIELD_SETTERS.get(key);
@@ -76,16 +91,12 @@ public class Compound extends SegmentBase {
 
         public void updateMapFromCompoundDTO(CompoundDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "EF", dto.getCompoundDosageFormDescriptionCode());
-            putIfNotNull(values, "EG", dto.getCompoundDispensingUnitFormIndicator());
-            putIfNotNull(values, "EC", dto.getCompoundIngredientComponentCount());
-            putIfNotNull(values, "RE", dto.getCompoundProductIdQualifier());
-            putIfNotNull(values, "TE", dto.getCompoundProductId());
-            putIfNotNull(values, "ED", dto.getCompoundIngredientQuantity());
-            putIfNotNull(values, "EE", dto.getCompoundIngredientDrugCost());
-            putIfNotNull(values, "UE", dto.getCompoundIngredientBasisOfCostDetermination());
-            putIfNotNull(values, "2G", dto.getCompoundIngredientModifierCodeCount());
-            putIfNotNull(values, "2H", dto.getCompoundIngredientModifierCode());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

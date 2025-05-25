@@ -69,6 +69,23 @@ public class Prescriber extends SegmentBase {
             FIELD_SETTERS.put("2P", PrescriberDTO::setPrescriberZipPostalZone);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<PrescriberDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("EZ", PrescriberDTO::getPrescriberIdQualifier);
+            FIELD_GETTERS.put("DB", PrescriberDTO::getPrescriberId);
+            FIELD_GETTERS.put("DR", PrescriberDTO::getPrescriberLastName);
+            FIELD_GETTERS.put("PM", PrescriberDTO::getPrescriberPhoneNumber);
+            FIELD_GETTERS.put("2E", PrescriberDTO::getPrimaryCareProviderIdQualifier);
+            FIELD_GETTERS.put("DL", PrescriberDTO::getPrimaryCareProviderId);
+            FIELD_GETTERS.put("4E", PrescriberDTO::getPrimaryCareProviderLastName);
+            FIELD_GETTERS.put("2J", PrescriberDTO::getPrescriberFirstName);
+            FIELD_GETTERS.put("2K", PrescriberDTO::getPrescriberStreetAddress);
+            FIELD_GETTERS.put("2M", PrescriberDTO::getPrescriberCityAddress);
+            FIELD_GETTERS.put("2N", PrescriberDTO::getPrescriberStateProvinceAddress);
+            FIELD_GETTERS.put("2P", PrescriberDTO::getPrescriberZipPostalZone);
+        }
+
         public void updatePrescriberDTOFromMap(Map<String, Object> values, PrescriberDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<PrescriberDTO, String> setter = FIELD_SETTERS.get(key);
@@ -80,24 +97,12 @@ public class Prescriber extends SegmentBase {
 
         public void updateMapFromPrescriberDTO(PrescriberDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "EZ", dto.getPrescriberIdQualifier());
-            putIfNotNull(values, "DB", dto.getPrescriberId());
-            putIfNotNull(values, "DR", dto.getPrescriberLastName());
-            putIfNotNull(values, "PM", dto.getPrescriberPhoneNumber());
-            putIfNotNull(values, "2E", dto.getPrimaryCareProviderIdQualifier());
-            putIfNotNull(values, "DL", dto.getPrimaryCareProviderId());
-            putIfNotNull(values, "4E", dto.getPrimaryCareProviderLastName());
-            putIfNotNull(values, "2J", dto.getPrescriberFirstName());
-            putIfNotNull(values, "2K", dto.getPrescriberStreetAddress());
-            putIfNotNull(values, "2M", dto.getPrescriberCityAddress());
-            putIfNotNull(values, "2N", dto.getPrescriberStateProvinceAddress());
-            putIfNotNull(values, "2P", dto.getPrescriberZipPostalZone());
-        }
-
-        private void putIfNotNull(Map<String, Object> map, String key, Object value) {
-            if (value != null) {
-                map.put(key, value);
-            }
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

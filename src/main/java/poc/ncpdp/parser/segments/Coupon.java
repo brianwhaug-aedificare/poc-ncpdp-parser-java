@@ -49,6 +49,12 @@ public class Coupon extends SegmentBase {
             "NE", CouponDTO::setCouponValueAmount
         );
 
+        private static final Map<String, java.util.function.Function<CouponDTO, Object>> FIELD_GETTERS = Map.of(
+            "KE", CouponDTO::getCouponType,
+            "ME", CouponDTO::getCouponNumber,
+            "NE", CouponDTO::getCouponValueAmount
+        );
+
         public void updateCouponDTOFromMap(Map<String, Object> values, CouponDTO dto) {
             values.forEach((key, value) -> {
                 BiConsumer<CouponDTO, String> setter = FIELD_SETTERS.get(key);
@@ -60,9 +66,12 @@ public class Coupon extends SegmentBase {
 
         public void updateMapFromCouponDTO(CouponDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "KE", dto.getCouponType());
-            putIfNotNull(values, "ME", dto.getCouponNumber());
-            putIfNotNull(values, "NE", dto.getCouponValueAmount());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

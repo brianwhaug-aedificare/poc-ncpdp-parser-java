@@ -57,6 +57,17 @@ public class ResponsePriorAuth extends SegmentBase {
             "PY", ResponsePriorAuthDTO::setPriorAuthorizationNumberAssigned
         );
 
+        private static final Map<String, java.util.function.Function<ResponsePriorAuthDTO, Object>> FIELD_GETTERS = Map.of(
+            "PR", ResponsePriorAuthDTO::getPriorAuthorizationProcessedDate,
+            "PS", ResponsePriorAuthDTO::getPriorAuthorizationEffectiveDate,
+            "PT", ResponsePriorAuthDTO::getPriorAuthorizationExpirationDate,
+            "RA", ResponsePriorAuthDTO::getPriorAuthorizationQuantity,
+            "RB", ResponsePriorAuthDTO::getPriorAuthorizationDollarsAuthorized,
+            "PW", ResponsePriorAuthDTO::getPriorAuthorizationNumberOfRefillsAuthorized,
+            "PX", ResponsePriorAuthDTO::getPriorAuthorizationQuantityAccumulated,
+            "PY", ResponsePriorAuthDTO::getPriorAuthorizationNumberAssigned
+        );
+
         public void updateResponsePriorAuthDTOFromMap(Map<String, Object> values, ResponsePriorAuthDTO dto) {
             values.forEach((key, value) -> {
                 BiConsumer<ResponsePriorAuthDTO, String> setter = FIELD_SETTERS.get(key);
@@ -68,20 +79,12 @@ public class ResponsePriorAuth extends SegmentBase {
 
         public void updateMapFromResponsePriorAuthDTO(ResponsePriorAuthDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "PR", dto.getPriorAuthorizationProcessedDate());
-            putIfNotNull(values, "PS", dto.getPriorAuthorizationEffectiveDate());
-            putIfNotNull(values, "PT", dto.getPriorAuthorizationExpirationDate());
-            putIfNotNull(values, "RA", dto.getPriorAuthorizationQuantity());
-            putIfNotNull(values, "RB", dto.getPriorAuthorizationDollarsAuthorized());
-            putIfNotNull(values, "PW", dto.getPriorAuthorizationNumberOfRefillsAuthorized());
-            putIfNotNull(values, "PX", dto.getPriorAuthorizationQuantityAccumulated());
-            putIfNotNull(values, "PY", dto.getPriorAuthorizationNumberAssigned());
-        }
-
-        private void putIfNotNull(Map<String, Object> map, String key, Object value) {
-            if (value != null) {
-                map.put(key, value);
-            }
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

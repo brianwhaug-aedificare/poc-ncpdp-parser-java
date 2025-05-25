@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import poc.ncpdp.data.segments.ResponseStatusDTO;
 
@@ -57,23 +58,43 @@ public class ResponseStatus extends SegmentBase {
 
     private static class ResponseStatusMapper {
         private static final Map<String, BiConsumer<ResponseStatusDTO, String>> FIELD_SETTERS = Map.ofEntries(
-            Map.entry("AN", ResponseStatusDTO::setResponseStatus),
-            Map.entry("F3", ResponseStatusDTO::setAuthorizationNumber),
-            Map.entry("FA", ResponseStatusDTO::setRejectCount),
-            Map.entry("FB", ResponseStatusDTO::setRejectCode),
-            Map.entry("4F", ResponseStatusDTO::setRejectFieldOccurrenceIndicator),
-            Map.entry("5F", ResponseStatusDTO::setApprovedMessageCodeCount),
-            Map.entry("6F", ResponseStatusDTO::setApprovedMessageCode),
-            Map.entry("UF", ResponseStatusDTO::setAdditionalMessageInformationCount),
-            Map.entry("UH", ResponseStatusDTO::setAdditionalMessageInformationQualifier),
-            Map.entry("FQ", ResponseStatusDTO::setAdditionalMessageInformation),
-            Map.entry("UG", ResponseStatusDTO::setAdditionalMessageInformationContinuity),
-            Map.entry("7F", ResponseStatusDTO::setHelpDeskPhoneNumberQualifier),
-            Map.entry("8F", ResponseStatusDTO::setHelpDeskPhoneNumber),
-            Map.entry("K5", ResponseStatusDTO::setTransactionReferenceNumber),
-            Map.entry("A7", ResponseStatusDTO::setInternalControlNumber),
-            Map.entry("MA", ResponseStatusDTO::setUrl)
-        );
+                Map.entry("AN", ResponseStatusDTO::setResponseStatus),
+                Map.entry("F3", ResponseStatusDTO::setAuthorizationNumber),
+                Map.entry("FA", ResponseStatusDTO::setRejectCount),
+                Map.entry("FB", ResponseStatusDTO::setRejectCode),
+                Map.entry("4F", ResponseStatusDTO::setRejectFieldOccurrenceIndicator),
+                Map.entry("5F", ResponseStatusDTO::setApprovedMessageCodeCount),
+                Map.entry("6F", ResponseStatusDTO::setApprovedMessageCode),
+                Map.entry("UF", ResponseStatusDTO::setAdditionalMessageInformationCount),
+                Map.entry("UH", ResponseStatusDTO::setAdditionalMessageInformationQualifier),
+                Map.entry("FQ", ResponseStatusDTO::setAdditionalMessageInformation),
+                Map.entry("UG", ResponseStatusDTO::setAdditionalMessageInformationContinuity),
+                Map.entry("7F", ResponseStatusDTO::setHelpDeskPhoneNumberQualifier),
+                Map.entry("8F", ResponseStatusDTO::setHelpDeskPhoneNumber),
+                Map.entry("K5", ResponseStatusDTO::setTransactionReferenceNumber),
+                Map.entry("A7", ResponseStatusDTO::setInternalControlNumber),
+                Map.entry("MA", ResponseStatusDTO::setUrl));
+
+        private static final Map<String, Function<ResponseStatusDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("AN", ResponseStatusDTO::getResponseStatus);
+            FIELD_GETTERS.put("F3", ResponseStatusDTO::getAuthorizationNumber);
+            FIELD_GETTERS.put("FA", ResponseStatusDTO::getRejectCount);
+            FIELD_GETTERS.put("FB", ResponseStatusDTO::getRejectCode);
+            FIELD_GETTERS.put("4F", ResponseStatusDTO::getRejectFieldOccurrenceIndicator);
+            FIELD_GETTERS.put("5F", ResponseStatusDTO::getApprovedMessageCodeCount);
+            FIELD_GETTERS.put("6F", ResponseStatusDTO::getApprovedMessageCode);
+            FIELD_GETTERS.put("UF", ResponseStatusDTO::getAdditionalMessageInformationCount);
+            FIELD_GETTERS.put("UH", ResponseStatusDTO::getAdditionalMessageInformationQualifier);
+            FIELD_GETTERS.put("FQ", ResponseStatusDTO::getAdditionalMessageInformation);
+            FIELD_GETTERS.put("UG", ResponseStatusDTO::getAdditionalMessageInformationContinuity);
+            FIELD_GETTERS.put("7F", ResponseStatusDTO::getHelpDeskPhoneNumberQualifier);
+            FIELD_GETTERS.put("8F", ResponseStatusDTO::getHelpDeskPhoneNumber);
+            FIELD_GETTERS.put("K5", ResponseStatusDTO::getTransactionReferenceNumber);
+            FIELD_GETTERS.put("A7", ResponseStatusDTO::getInternalControlNumber);
+            FIELD_GETTERS.put("MA", ResponseStatusDTO::getUrl);
+        }
 
         public void updateResponseStatusDTOFromMap(Map<String, Object> values, ResponseStatusDTO dto) {
             values.forEach((key, value) -> {
@@ -86,22 +107,12 @@ public class ResponseStatus extends SegmentBase {
 
         public void updateMapFromResponseStatusDTO(ResponseStatusDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "AN", dto.getResponseStatus());
-            putIfNotNull(values, "F3", dto.getAuthorizationNumber());
-            putIfNotNull(values, "FA", dto.getRejectCount());
-            putIfNotNull(values, "FB", dto.getRejectCode());
-            putIfNotNull(values, "4F", dto.getRejectFieldOccurrenceIndicator());
-            putIfNotNull(values, "5F", dto.getApprovedMessageCodeCount());
-            putIfNotNull(values, "6F", dto.getApprovedMessageCode());
-            putIfNotNull(values, "UF", dto.getAdditionalMessageInformationCount());
-            putIfNotNull(values, "UH", dto.getAdditionalMessageInformationQualifier());
-            putIfNotNull(values, "FQ", dto.getAdditionalMessageInformation());
-            putIfNotNull(values, "UG", dto.getAdditionalMessageInformationContinuity());
-            putIfNotNull(values, "7F", dto.getHelpDeskPhoneNumberQualifier());
-            putIfNotNull(values, "8F", dto.getHelpDeskPhoneNumber());
-            putIfNotNull(values, "K5", dto.getTransactionReferenceNumber());
-            putIfNotNull(values, "A7", dto.getInternalControlNumber());
-            putIfNotNull(values, "MA", dto.getUrl());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

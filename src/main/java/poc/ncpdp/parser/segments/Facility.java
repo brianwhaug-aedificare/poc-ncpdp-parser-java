@@ -56,6 +56,17 @@ public class Facility extends SegmentBase {
             FIELD_SETTERS.put("6D", (dto, v) -> dto.setFacilityZipPostalZone(v));
         }
 
+        private static final java.util.Map<String, java.util.function.Function<FacilityDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("8C", FacilityDTO::getFacilityId);
+            FIELD_GETTERS.put("3Q", FacilityDTO::getFacilityName);
+            FIELD_GETTERS.put("3U", FacilityDTO::getFacilityStreetAddress);
+            FIELD_GETTERS.put("5J", FacilityDTO::getFacilityCityAddress);
+            FIELD_GETTERS.put("3V", FacilityDTO::getFacilityStateProvinceAddress);
+            FIELD_GETTERS.put("6D", FacilityDTO::getFacilityZipPostalZone);
+        }
+
         public void updateFacilityDTOFromMap(Map<String, Object> values, FacilityDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<FacilityDTO, String> setter = FIELD_SETTERS.get(key);
@@ -67,12 +78,12 @@ public class Facility extends SegmentBase {
 
         public void updateMapFromFacilityDTO(FacilityDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "8C", dto.getFacilityId());
-            putIfNotNull(values, "3Q", dto.getFacilityName());
-            putIfNotNull(values, "3U", dto.getFacilityStreetAddress());
-            putIfNotNull(values, "5J", dto.getFacilityCityAddress());
-            putIfNotNull(values, "3V", dto.getFacilityStateProvinceAddress());
-            putIfNotNull(values, "6D", dto.getFacilityZipPostalZone());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

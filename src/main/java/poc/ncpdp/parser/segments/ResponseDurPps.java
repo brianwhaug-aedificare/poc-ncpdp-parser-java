@@ -61,6 +61,19 @@ public class ResponseDurPps extends SegmentBase {
             "NS", ResponseDurPpsDTO::setDurAdditionalText
         );
 
+        private static final Map<String, java.util.function.Function<ResponseDurPpsDTO, Object>> FIELD_GETTERS = Map.of(
+            "J6", ResponseDurPpsDTO::getDurPpsResponseCodeCounter,
+            "E4", ResponseDurPpsDTO::getReasonForServiceCode,
+            "FS", ResponseDurPpsDTO::getClinicalSignificanceCode,
+            "FT", ResponseDurPpsDTO::getOtherPharmacyIndicator,
+            "FV", ResponseDurPpsDTO::getQuantityOfPreviousFill,
+            "FU", ResponseDurPpsDTO::getPreviousDateOfFill,
+            "FW", ResponseDurPpsDTO::getDatabaseIndicator,
+            "FX", ResponseDurPpsDTO::getOtherPrescriberIndicator,
+            "FY", ResponseDurPpsDTO::getDurFreeTextMessage,
+            "NS", ResponseDurPpsDTO::getDurAdditionalText
+        );
+
         public void updateResponseDurPpsDTOFromMap(Map<String, Object> values, ResponseDurPpsDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<ResponseDurPpsDTO, String> setter = FIELD_SETTERS.get(key);
@@ -72,16 +85,12 @@ public class ResponseDurPps extends SegmentBase {
 
         public void updateMapFromResponseDurPpsDTO(ResponseDurPpsDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "J6", dto.getDurPpsResponseCodeCounter());
-            putIfNotNull(values, "E4", dto.getReasonForServiceCode());
-            putIfNotNull(values, "FS", dto.getClinicalSignificanceCode());
-            putIfNotNull(values, "FT", dto.getOtherPharmacyIndicator());
-            putIfNotNull(values, "FV", dto.getQuantityOfPreviousFill());
-            putIfNotNull(values, "FU", dto.getPreviousDateOfFill());
-            putIfNotNull(values, "FW", dto.getDatabaseIndicator());
-            putIfNotNull(values, "FX", dto.getOtherPrescriberIndicator());
-            putIfNotNull(values, "FY", dto.getDurFreeTextMessage());
-            putIfNotNull(values, "NS", dto.getDurAdditionalText());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

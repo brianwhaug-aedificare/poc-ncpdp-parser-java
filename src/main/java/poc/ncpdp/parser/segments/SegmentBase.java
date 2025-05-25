@@ -73,12 +73,6 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
         }
     }
 
-    protected static void putIfNotNull(Map<String, Object> map, String key, Object value) {
-        if (value != null) {
-            map.put(key, value);
-        }
-    }
-
     public Object get(Object key) {
         String fieldKey = key instanceof String ? (String) key : getFieldBySymbol(key.toString());
         return hash.get(fieldKey);

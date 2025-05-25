@@ -59,6 +59,19 @@ public class PriorAuth extends SegmentBase {
             FIELD_SETTERS.put("PY", PriorAuthDTO::setPriorAuthorizationNumberAssigned);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<PriorAuthDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("PR", PriorAuthDTO::getPriorAuthorizationProcessedDate);
+            FIELD_GETTERS.put("PS", PriorAuthDTO::getPriorAuthorizationEffectiveDate);
+            FIELD_GETTERS.put("PT", PriorAuthDTO::getPriorAuthorizationExpirationDate);
+            FIELD_GETTERS.put("RA", PriorAuthDTO::getPriorAuthorizationQuantity);
+            FIELD_GETTERS.put("RB", PriorAuthDTO::getPriorAuthorizationDollarsAuthorized);
+            FIELD_GETTERS.put("PW", PriorAuthDTO::getPriorAuthorizationNumberOfRefillsAuthorized);
+            FIELD_GETTERS.put("PX", PriorAuthDTO::getPriorAuthorizationQuantityAccumulated);
+            FIELD_GETTERS.put("PY", PriorAuthDTO::getPriorAuthorizationNumberAssigned);
+        }
+
         public void updatePriorAuthDTOFromMap(Map<String, Object> values, PriorAuthDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<PriorAuthDTO, String> setter = FIELD_SETTERS.get(key);
@@ -70,14 +83,12 @@ public class PriorAuth extends SegmentBase {
 
         public void updateMapFromPriorAuthDTO(PriorAuthDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "PR", dto.getPriorAuthorizationProcessedDate());
-            putIfNotNull(values, "PS", dto.getPriorAuthorizationEffectiveDate());
-            putIfNotNull(values, "PT", dto.getPriorAuthorizationExpirationDate());
-            putIfNotNull(values, "RA", dto.getPriorAuthorizationQuantity());
-            putIfNotNull(values, "RB", dto.getPriorAuthorizationDollarsAuthorized());
-            putIfNotNull(values, "PW", dto.getPriorAuthorizationNumberOfRefillsAuthorized());
-            putIfNotNull(values, "PX", dto.getPriorAuthorizationQuantityAccumulated());
-            putIfNotNull(values, "PY", dto.getPriorAuthorizationNumberAssigned());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

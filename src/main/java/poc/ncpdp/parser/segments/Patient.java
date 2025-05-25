@@ -79,6 +79,28 @@ public class Patient extends SegmentBase {
             FIELD_SETTERS.put("4X", PatientDTO::setPatientResidence);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<PatientDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new java.util.LinkedHashMap<>();
+            FIELD_GETTERS.put("CX", PatientDTO::getPatientIdQualifier);
+            FIELD_GETTERS.put("CY", PatientDTO::getPatientId);
+            FIELD_GETTERS.put("C4", PatientDTO::getDateOfBirth);
+            FIELD_GETTERS.put("C5", PatientDTO::getPatientGenderCode);
+            FIELD_GETTERS.put("CA", PatientDTO::getPatientFirstName);
+            FIELD_GETTERS.put("CB", PatientDTO::getPatientLastName);
+            FIELD_GETTERS.put("CM", PatientDTO::getPatientStreetAddress);
+            FIELD_GETTERS.put("CN", PatientDTO::getPatientCity);
+            FIELD_GETTERS.put("CO", PatientDTO::getPatientStateOrProvince);
+            FIELD_GETTERS.put("CP", PatientDTO::getPatientZipPostalCode);
+            FIELD_GETTERS.put("CQ", PatientDTO::getPatientPhoneNumber);
+            FIELD_GETTERS.put("C7", PatientDTO::getPlaceOfService);
+            FIELD_GETTERS.put("CZ", PatientDTO::getEmployerId);
+            FIELD_GETTERS.put("1C", PatientDTO::getSmokerNonSmokerCode);
+            FIELD_GETTERS.put("2C", PatientDTO::getPregnancyIndicator);
+            FIELD_GETTERS.put("HN", PatientDTO::getPatientEmailAddress);
+            FIELD_GETTERS.put("4X", PatientDTO::getPatientResidence);
+        }
+
         public void updatePatientDTOFromMap(Map<String, Object> values, PatientDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<PatientDTO, String> setter = FIELD_SETTERS.get(key);
@@ -90,23 +112,12 @@ public class Patient extends SegmentBase {
 
         public void updateMapFromPatientDTO(PatientDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "CX", dto.getPatientIdQualifier());
-            putIfNotNull(values, "CY", dto.getPatientId());
-            putIfNotNull(values, "C4", dto.getDateOfBirth());
-            putIfNotNull(values, "C5", dto.getPatientGenderCode());
-            putIfNotNull(values, "CA", dto.getPatientFirstName());
-            putIfNotNull(values, "CB", dto.getPatientLastName());
-            putIfNotNull(values, "CM", dto.getPatientStreetAddress());
-            putIfNotNull(values, "CN", dto.getPatientCity());
-            putIfNotNull(values, "CO", dto.getPatientStateOrProvince());
-            putIfNotNull(values, "CP", dto.getPatientZipPostalCode());
-            putIfNotNull(values, "CQ", dto.getPatientPhoneNumber());
-            putIfNotNull(values, "C7", dto.getPlaceOfService());
-            putIfNotNull(values, "CZ", dto.getEmployerId());
-            putIfNotNull(values, "1C", dto.getSmokerNonSmokerCode());
-            putIfNotNull(values, "2C", dto.getPregnancyIndicator());
-            putIfNotNull(values, "HN", dto.getPatientEmailAddress());
-            putIfNotNull(values, "4X", dto.getPatientResidence());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

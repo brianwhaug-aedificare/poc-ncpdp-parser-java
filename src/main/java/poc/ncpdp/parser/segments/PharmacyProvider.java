@@ -49,6 +49,13 @@ public class PharmacyProvider extends SegmentBase {
             FIELD_SETTERS.put("E9", PharmacyProviderDTO::setProviderId);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<PharmacyProviderDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("EY", PharmacyProviderDTO::getProviderIdQualifier);
+            FIELD_GETTERS.put("E9", PharmacyProviderDTO::getProviderId);
+        }
+
         public void updateProviderDTOFromMap(Map<String, Object> values, PharmacyProviderDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<PharmacyProviderDTO, String> setter = FIELD_SETTERS.get(key);
@@ -60,8 +67,12 @@ public class PharmacyProvider extends SegmentBase {
 
         public void updateMapFromProviderDTO(PharmacyProviderDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "EY", dto.getProviderIdQualifier());
-            putIfNotNull(values, "E9", dto.getProviderId());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

@@ -58,6 +58,18 @@ public class DurPps extends SegmentBase {
             FIELD_SETTERS.put("H6", DurPpsDTO::setDurCoAgentId);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<DurPpsDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("7E", DurPpsDTO::getDurPpsCodeCounter);
+            FIELD_GETTERS.put("E4", DurPpsDTO::getReasonForServiceCode);
+            FIELD_GETTERS.put("E5", DurPpsDTO::getProfessionalServiceCode);
+            FIELD_GETTERS.put("E6", DurPpsDTO::getResultOfServiceCode);
+            FIELD_GETTERS.put("8E", DurPpsDTO::getDurPpsLevelOfEffort);
+            FIELD_GETTERS.put("J9", DurPpsDTO::getDurCoAgentIdQualifier);
+            FIELD_GETTERS.put("H6", DurPpsDTO::getDurCoAgentId);
+        }
+
         public void updateDurPpsDTOFromMap(Map<String, Object> values, DurPpsDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<DurPpsDTO, String> setter = FIELD_SETTERS.get(key);
@@ -69,13 +81,12 @@ public class DurPps extends SegmentBase {
 
         public void updateMapFromDurPpsDTO(DurPpsDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "7E", dto.getDurPpsCodeCounter());
-            putIfNotNull(values, "E4", dto.getReasonForServiceCode());
-            putIfNotNull(values, "E5", dto.getProfessionalServiceCode());
-            putIfNotNull(values, "E6", dto.getResultOfServiceCode());
-            putIfNotNull(values, "8E", dto.getDurPpsLevelOfEffort());
-            putIfNotNull(values, "J9", dto.getDurCoAgentIdQualifier());
-            putIfNotNull(values, "H6", dto.getDurCoAgentId());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

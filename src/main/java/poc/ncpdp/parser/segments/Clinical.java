@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import poc.ncpdp.data.segments.ClinicalDTO;
 
@@ -72,17 +73,28 @@ public class Clinical extends SegmentBase {
             });
         }
 
+        private static final Map<String, Function<ClinicalDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("VE", ClinicalDTO::getDiagnosisCodeCount);
+            FIELD_GETTERS.put("WE", ClinicalDTO::getDiagnosisCodeQualifier);
+            FIELD_GETTERS.put("DO", ClinicalDTO::getDiagnosisCode);
+            FIELD_GETTERS.put("XE", ClinicalDTO::getClinicalInformationCounter);
+            FIELD_GETTERS.put("ZE", ClinicalDTO::getMeasurementDate);
+            FIELD_GETTERS.put("H1", ClinicalDTO::getMeasurementTime);
+            FIELD_GETTERS.put("H2", ClinicalDTO::getMeasurementDimension);
+            FIELD_GETTERS.put("H3", ClinicalDTO::getMeasurementUnit);
+            FIELD_GETTERS.put("H4", ClinicalDTO::getMeasurementValue);
+        }
+
         public void updateMapFromClinicalDTO(ClinicalDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "VE", dto.getDiagnosisCodeCount());
-            putIfNotNull(values, "WE", dto.getDiagnosisCodeQualifier());
-            putIfNotNull(values, "DO", dto.getDiagnosisCode());
-            putIfNotNull(values, "XE", dto.getClinicalInformationCounter());
-            putIfNotNull(values, "ZE", dto.getMeasurementDate());
-            putIfNotNull(values, "H1", dto.getMeasurementTime());
-            putIfNotNull(values, "H2", dto.getMeasurementDimension());
-            putIfNotNull(values, "H3", dto.getMeasurementUnit());
-            putIfNotNull(values, "H4", dto.getMeasurementValue());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

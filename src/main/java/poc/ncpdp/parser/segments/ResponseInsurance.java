@@ -57,6 +57,17 @@ public class ResponseInsurance extends SegmentBase {
             "C2", ResponseInsuranceDTO::setCardholderId
         );
 
+        private static final Map<String, java.util.function.Function<ResponseInsuranceDTO, Object>> FIELD_GETTERS = Map.of(
+            "C1", ResponseInsuranceDTO::getGroupId,
+            "FO", ResponseInsuranceDTO::getPlanId,
+            "2F", ResponseInsuranceDTO::getNetworkReimbursementId,
+            "J7", ResponseInsuranceDTO::getPayerIdQualifier,
+            "J8", ResponseInsuranceDTO::getPayerId,
+            "N5", ResponseInsuranceDTO::getMedicaidIdNumber,
+            "N6", ResponseInsuranceDTO::getMedicaidAgencyNumber,
+            "C2", ResponseInsuranceDTO::getCardholderId
+        );
+
         public void updateResponseInsuranceDTOFromMap(Map<String, Object> values, ResponseInsuranceDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<ResponseInsuranceDTO, String> setter = FIELD_SETTERS.get(key);
@@ -68,14 +79,12 @@ public class ResponseInsurance extends SegmentBase {
 
         public void updateMapFromResponseInsuranceDTO(ResponseInsuranceDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "C1", dto.getGroupId());
-            putIfNotNull(values, "FO", dto.getPlanId());
-            putIfNotNull(values, "2F", dto.getNetworkReimbursementId());
-            putIfNotNull(values, "J7", dto.getPayerIdQualifier());
-            putIfNotNull(values, "J8", dto.getPayerId());
-            putIfNotNull(values, "N5", dto.getMedicaidIdNumber());
-            putIfNotNull(values, "N6", dto.getMedicaidAgencyNumber());
-            putIfNotNull(values, "C2", dto.getCardholderId());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

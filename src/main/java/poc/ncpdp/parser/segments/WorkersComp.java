@@ -61,6 +61,7 @@ public class WorkersComp extends SegmentBase {
 
     private static class WorkersCompMapper {
         private static final Map<String, BiConsumer<WorkersCompDTO, String>> FIELD_SETTERS;
+        private static final Map<String, java.util.function.Function<WorkersCompDTO, Object>> FIELD_GETTERS;
         static {
             FIELD_SETTERS = new HashMap<>();
             FIELD_SETTERS.put("DY", (dto, v) -> dto.setDateOfInjury(v));
@@ -83,6 +84,28 @@ public class WorkersComp extends SegmentBase {
             FIELD_SETTERS.put("TY", (dto, v) -> dto.setPayToZipPostalZone(v));
             FIELD_SETTERS.put("TZ", (dto, v) -> dto.setGenericEquivalentProductIdQualifier(v));
             FIELD_SETTERS.put("UA", (dto, v) -> dto.setGenericEquivalentProductId(v));
+
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("DY", WorkersCompDTO::getDateOfInjury);
+            FIELD_GETTERS.put("CF", WorkersCompDTO::getEmployerName);
+            FIELD_GETTERS.put("CG", WorkersCompDTO::getEmployerStreetAddress);
+            FIELD_GETTERS.put("CH", WorkersCompDTO::getEmployerCityAddress);
+            FIELD_GETTERS.put("CI", WorkersCompDTO::getEmployerStateProvinceAddress);
+            FIELD_GETTERS.put("CJ", WorkersCompDTO::getEmployerZipPostalCode);
+            FIELD_GETTERS.put("CK", WorkersCompDTO::getEmployerPhoneNumber);
+            FIELD_GETTERS.put("CL", WorkersCompDTO::getEmployerContactName);
+            FIELD_GETTERS.put("CR", WorkersCompDTO::getCarrierId);
+            FIELD_GETTERS.put("DZ", WorkersCompDTO::getClaimReferenceId);
+            FIELD_GETTERS.put("TR", WorkersCompDTO::getBillingEntityTypeIndicator);
+            FIELD_GETTERS.put("TS", WorkersCompDTO::getPayToQualifier);
+            FIELD_GETTERS.put("TT", WorkersCompDTO::getPayToId);
+            FIELD_GETTERS.put("TU", WorkersCompDTO::getPayToName);
+            FIELD_GETTERS.put("TV", WorkersCompDTO::getPayToStreetAddress);
+            FIELD_GETTERS.put("TW", WorkersCompDTO::getPayToCityAddress);
+            FIELD_GETTERS.put("TX", WorkersCompDTO::getPayToStateProvinceAddress);
+            FIELD_GETTERS.put("TY", WorkersCompDTO::getPayToZipPostalZone);
+            FIELD_GETTERS.put("TZ", WorkersCompDTO::getGenericEquivalentProductIdQualifier);
+            FIELD_GETTERS.put("UA", WorkersCompDTO::getGenericEquivalentProductId);
         }
 
         public void updateWorkersCompDTOFromMap(Map<String, Object> values, WorkersCompDTO dto) {
@@ -96,26 +119,12 @@ public class WorkersComp extends SegmentBase {
 
         public void updateMapFromWorkersCompDTO(WorkersCompDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "DY", dto.getDateOfInjury());
-            putIfNotNull(values, "CF", dto.getEmployerName());
-            putIfNotNull(values, "CG", dto.getEmployerStreetAddress());
-            putIfNotNull(values, "CH", dto.getEmployerCityAddress());
-            putIfNotNull(values, "CI", dto.getEmployerStateProvinceAddress());
-            putIfNotNull(values, "CJ", dto.getEmployerZipPostalCode());
-            putIfNotNull(values, "CK", dto.getEmployerPhoneNumber());
-            putIfNotNull(values, "CL", dto.getEmployerContactName());
-            putIfNotNull(values, "CR", dto.getCarrierId());
-            putIfNotNull(values, "DZ", dto.getClaimReferenceId());
-            putIfNotNull(values, "TR", dto.getBillingEntityTypeIndicator());
-            putIfNotNull(values, "TS", dto.getPayToQualifier());
-            putIfNotNull(values, "TT", dto.getPayToId());
-            putIfNotNull(values, "TU", dto.getPayToName());
-            putIfNotNull(values, "TV", dto.getPayToStreetAddress());
-            putIfNotNull(values, "TW", dto.getPayToCityAddress());
-            putIfNotNull(values, "TX", dto.getPayToStateProvinceAddress());
-            putIfNotNull(values, "TY", dto.getPayToZipPostalZone());
-            putIfNotNull(values, "TZ", dto.getGenericEquivalentProductIdQualifier());
-            putIfNotNull(values, "UA", dto.getGenericEquivalentProductId());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

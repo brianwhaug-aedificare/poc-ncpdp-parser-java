@@ -75,6 +75,26 @@ public class AdditionalDocumentation extends SegmentBase {
             FIELD_SETTERS.put("4K", (dto, v) -> dto.setQuestionAlphanumericResponse(v));
         }
 
+        private static final Map<String, java.util.function.Function<AdditionalDocumentationDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("2Q", AdditionalDocumentationDTO::getAdditionalDocumentationTypeId);
+            FIELD_GETTERS.put("2V", AdditionalDocumentationDTO::getRequestPeriodBeginDate);
+            FIELD_GETTERS.put("2W", AdditionalDocumentationDTO::getRequestPeriodRecertRevisedDate);
+            FIELD_GETTERS.put("2U", AdditionalDocumentationDTO::getRequestStatus);
+            FIELD_GETTERS.put("2S", AdditionalDocumentationDTO::getLengthOfNeedQualifier);
+            FIELD_GETTERS.put("2R", AdditionalDocumentationDTO::getLengthOfNeed);
+            FIELD_GETTERS.put("2T", AdditionalDocumentationDTO::getPrescriberSupplierDateSigned);
+            FIELD_GETTERS.put("2X", AdditionalDocumentationDTO::getSupportingDocumentation);
+            FIELD_GETTERS.put("2Z", AdditionalDocumentationDTO::getQuestionNumberLetterCount);
+            FIELD_GETTERS.put("4B", AdditionalDocumentationDTO::getQuestionNumberLetter);
+            FIELD_GETTERS.put("4D", AdditionalDocumentationDTO::getQuestionPercentResponse);
+            FIELD_GETTERS.put("4G", AdditionalDocumentationDTO::getQuestionDateResponse);
+            FIELD_GETTERS.put("4H", AdditionalDocumentationDTO::getQuestionDollarAmountResponse);
+            FIELD_GETTERS.put("4J", AdditionalDocumentationDTO::getQuestionNumericResponse);
+            FIELD_GETTERS.put("4K", AdditionalDocumentationDTO::getQuestionAlphanumericResponse);
+        }
+
         public void updateAdditionalDocumentationDTOFromMap(Map<String, Object> values, AdditionalDocumentationDTO dto) {
             values.forEach((key, value) -> {
                 BiConsumer<AdditionalDocumentationDTO, String> setter = FIELD_SETTERS.get(key);
@@ -86,21 +106,12 @@ public class AdditionalDocumentation extends SegmentBase {
 
         public void updateMapFromAdditionalDocumentationDTO(AdditionalDocumentationDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "2Q", dto.getAdditionalDocumentationTypeId());
-            putIfNotNull(values, "2V", dto.getRequestPeriodBeginDate());
-            putIfNotNull(values, "2W", dto.getRequestPeriodRecertRevisedDate());
-            putIfNotNull(values, "2U", dto.getRequestStatus());
-            putIfNotNull(values, "2S", dto.getLengthOfNeedQualifier());
-            putIfNotNull(values, "2R", dto.getLengthOfNeed());
-            putIfNotNull(values, "2T", dto.getPrescriberSupplierDateSigned());
-            putIfNotNull(values, "2X", dto.getSupportingDocumentation());
-            putIfNotNull(values, "2Z", dto.getQuestionNumberLetterCount());
-            putIfNotNull(values, "4B", dto.getQuestionNumberLetter());
-            putIfNotNull(values, "4D", dto.getQuestionPercentResponse());
-            putIfNotNull(values, "4G", dto.getQuestionDateResponse());
-            putIfNotNull(values, "4H", dto.getQuestionDollarAmountResponse());
-            putIfNotNull(values, "4J", dto.getQuestionNumericResponse());
-            putIfNotNull(values, "4K", dto.getQuestionAlphanumericResponse());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

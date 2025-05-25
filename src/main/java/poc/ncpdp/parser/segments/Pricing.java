@@ -74,6 +74,26 @@ public class Pricing extends SegmentBase {
             FIELD_SETTERS.put("DN", PricingDTO::setBasisOfCostDetermination);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<PricingDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("D9", PricingDTO::getIngredientCostSubmitted);
+            FIELD_GETTERS.put("DC", PricingDTO::getDispensingFeeSubmitted);
+            FIELD_GETTERS.put("BE", PricingDTO::getProfessionalServiceFeeSubmitted);
+            FIELD_GETTERS.put("DX", PricingDTO::getPatientPaidAmountSubmitted);
+            FIELD_GETTERS.put("E3", PricingDTO::getIncentiveAmountSubmitted);
+            FIELD_GETTERS.put("H7", PricingDTO::getOtherAmountClaimedSubmittedCount);
+            FIELD_GETTERS.put("H8", PricingDTO::getOtherAmountClaimedSubmittedQualifier);
+            FIELD_GETTERS.put("H9", PricingDTO::getOtherAmountClaimedSubmitted);
+            FIELD_GETTERS.put("HA", PricingDTO::getFlatSalesTaxAmountSubmitted);
+            FIELD_GETTERS.put("GE", PricingDTO::getPercentageSalesTaxAmountSubmitted);
+            FIELD_GETTERS.put("HE", PricingDTO::getPercentageSalesTaxRateSubmitted);
+            FIELD_GETTERS.put("JE", PricingDTO::getPercentageSalesTaxBasisSubmitted);
+            FIELD_GETTERS.put("DQ", PricingDTO::getUsualAndCustomaryCharge);
+            FIELD_GETTERS.put("DU", PricingDTO::getGrossAmountDue);
+            FIELD_GETTERS.put("DN", PricingDTO::getBasisOfCostDetermination);
+        }
+
         public void updatePricingDTOFromMap(Map<String, Object> values, PricingDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<PricingDTO, String> setter = FIELD_SETTERS.get(key);
@@ -85,21 +105,12 @@ public class Pricing extends SegmentBase {
 
         public void updateMapFromPricingDTO(PricingDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "D9", dto.getIngredientCostSubmitted());
-            putIfNotNull(values, "DC", dto.getDispensingFeeSubmitted());
-            putIfNotNull(values, "BE", dto.getProfessionalServiceFeeSubmitted());
-            putIfNotNull(values, "DX", dto.getPatientPaidAmountSubmitted());
-            putIfNotNull(values, "E3", dto.getIncentiveAmountSubmitted());
-            putIfNotNull(values, "H7", dto.getOtherAmountClaimedSubmittedCount());
-            putIfNotNull(values, "H8", dto.getOtherAmountClaimedSubmittedQualifier());
-            putIfNotNull(values, "H9", dto.getOtherAmountClaimedSubmitted());
-            putIfNotNull(values, "HA", dto.getFlatSalesTaxAmountSubmitted());
-            putIfNotNull(values, "GE", dto.getPercentageSalesTaxAmountSubmitted());
-            putIfNotNull(values, "HE", dto.getPercentageSalesTaxRateSubmitted());
-            putIfNotNull(values, "JE", dto.getPercentageSalesTaxBasisSubmitted());
-            putIfNotNull(values, "DQ", dto.getUsualAndCustomaryCharge());
-            putIfNotNull(values, "DU", dto.getGrossAmountDue());
-            putIfNotNull(values, "DN", dto.getBasisOfCostDetermination());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

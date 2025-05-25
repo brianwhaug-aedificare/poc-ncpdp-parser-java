@@ -17,6 +17,9 @@ public class BuilderB1Test {
 
         String rawRequest = Builder.buildRequest(requestDTO);
 
+        System.out.println("requestContent: " + requestContent); 
+        System.out.println("rawRequest: " + rawRequest);
+
         // check length of requestContent should match rawRequest
         assertEquals("Request content length should match raw request", requestContent.length(), rawRequest.length());
         assertEquals("Request content should match raw request", requestContent, rawRequest);
@@ -47,9 +50,6 @@ public class BuilderB1Test {
         // Parse the response
         ResponseDTO response = Parser.parseResponseIntoDTO(responseContent);
         String rawResponse = Builder.buildResponse(response);
-
-        System.out.println("responseContent: " + responseContent); 
-        System.out.println("rawResponse: " + rawResponse);
 
         // check length of responseContent should match rawResponse
         assertEquals("Response content length should match raw response", responseContent.length(), rawResponse.length());

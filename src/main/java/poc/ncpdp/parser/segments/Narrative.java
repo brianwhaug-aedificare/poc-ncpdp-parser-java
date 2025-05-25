@@ -46,6 +46,12 @@ public class Narrative extends SegmentBase {
             FIELD_SETTERS.put("BM", NarrativeDTO::setNarrativeMessage);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<NarrativeDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("BM", NarrativeDTO::getNarrativeMessage);
+        }
+
         public void updateNarrativeDTOFromMap(Map<String, Object> values, NarrativeDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<NarrativeDTO, String> setter = FIELD_SETTERS.get(key);
@@ -57,7 +63,12 @@ public class Narrative extends SegmentBase {
 
         public void updateMapFromNarrativeDTO(NarrativeDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "BM", dto.getNarrativeMessage());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

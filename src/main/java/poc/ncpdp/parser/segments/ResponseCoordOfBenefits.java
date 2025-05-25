@@ -67,6 +67,23 @@ public class ResponseCoordOfBenefits extends SegmentBase {
             FIELD_SETTERS.put("UY", ResponseCoordOfBenefitsDTO::setOtherPayerBenefitTerminationDate);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<ResponseCoordOfBenefitsDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("NT", ResponseCoordOfBenefitsDTO::getOtherPayerIdCount);
+            FIELD_GETTERS.put("5C", ResponseCoordOfBenefitsDTO::getOtherPayerCoverageType);
+            FIELD_GETTERS.put("6C", ResponseCoordOfBenefitsDTO::getOtherPayerIdQualifier);
+            FIELD_GETTERS.put("7C", ResponseCoordOfBenefitsDTO::getOtherPayerId);
+            FIELD_GETTERS.put("MH", ResponseCoordOfBenefitsDTO::getOtherPayerProcessorControlNumber);
+            FIELD_GETTERS.put("NU", ResponseCoordOfBenefitsDTO::getOtherPayerCardholderId);
+            FIELD_GETTERS.put("MJ", ResponseCoordOfBenefitsDTO::getOtherPayerGroupId);
+            FIELD_GETTERS.put("UV", ResponseCoordOfBenefitsDTO::getOtherPayerPersonCode);
+            FIELD_GETTERS.put("UB", ResponseCoordOfBenefitsDTO::getOtherPayerHelpDeskPhoneNumber);
+            FIELD_GETTERS.put("UW", ResponseCoordOfBenefitsDTO::getOtherPayerPatientRelationshipCode);
+            FIELD_GETTERS.put("UX", ResponseCoordOfBenefitsDTO::getOtherPayerBenefitEffectiveDate);
+            FIELD_GETTERS.put("UY", ResponseCoordOfBenefitsDTO::getOtherPayerBenefitTerminationDate);
+        }
+
         public void updateResponseCoordOfBenefitsDTOFromMap(Map<String, Object> values, ResponseCoordOfBenefitsDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<ResponseCoordOfBenefitsDTO, String> setter = FIELD_SETTERS.get(key);
@@ -78,18 +95,12 @@ public class ResponseCoordOfBenefits extends SegmentBase {
 
         public void updateMapFromResponseCoordOfBenefitsDTO(ResponseCoordOfBenefitsDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "NT", dto.getOtherPayerIdCount());
-            putIfNotNull(values, "5C", dto.getOtherPayerCoverageType());
-            putIfNotNull(values, "6C", dto.getOtherPayerIdQualifier());
-            putIfNotNull(values, "7C", dto.getOtherPayerId());
-            putIfNotNull(values, "MH", dto.getOtherPayerProcessorControlNumber());
-            putIfNotNull(values, "NU", dto.getOtherPayerCardholderId());
-            putIfNotNull(values, "MJ", dto.getOtherPayerGroupId());
-            putIfNotNull(values, "UV", dto.getOtherPayerPersonCode());
-            putIfNotNull(values, "UB", dto.getOtherPayerHelpDeskPhoneNumber());
-            putIfNotNull(values, "UW", dto.getOtherPayerPatientRelationshipCode());
-            putIfNotNull(values, "UX", dto.getOtherPayerBenefitEffectiveDate());
-            putIfNotNull(values, "UY", dto.getOtherPayerBenefitTerminationDate());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

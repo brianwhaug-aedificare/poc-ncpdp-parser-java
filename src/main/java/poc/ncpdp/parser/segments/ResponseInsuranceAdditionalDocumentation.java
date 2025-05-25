@@ -55,6 +55,16 @@ public class ResponseInsuranceAdditionalDocumentation extends SegmentBase {
             "UT", ResponseInsuranceAdditionalDocumentationDTO::setNextMedicarePartDTerminationDate
         );
 
+        private static final Map<String, java.util.function.Function<ResponseInsuranceAdditionalDocumentationDTO, Object>> FIELD_GETTERS = Map.of(
+            "UR", ResponseInsuranceAdditionalDocumentationDTO::getMedicarePartDCoverageCode,
+            "UQ", ResponseInsuranceAdditionalDocumentationDTO::getCmsLowIncomeCostSharingLicsLevel,
+            "U1", ResponseInsuranceAdditionalDocumentationDTO::getContractNumber,
+            "FF", ResponseInsuranceAdditionalDocumentationDTO::getFormularyId,
+            "U6", ResponseInsuranceAdditionalDocumentationDTO::getBenefitId,
+            "US", ResponseInsuranceAdditionalDocumentationDTO::getNextMedicarePartDEffectiveDate,
+            "UT", ResponseInsuranceAdditionalDocumentationDTO::getNextMedicarePartDTerminationDate
+        );
+
         public void updateResponseInsuranceAdditionalDocumentationDTOFromMap(Map<String, Object> values, ResponseInsuranceAdditionalDocumentationDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<ResponseInsuranceAdditionalDocumentationDTO, String> setter = FIELD_SETTERS.get(key);
@@ -66,13 +76,12 @@ public class ResponseInsuranceAdditionalDocumentation extends SegmentBase {
 
         public void updateMapFromResponseInsuranceAdditionalDocumentationDTO(ResponseInsuranceAdditionalDocumentationDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "UR", dto.getMedicarePartDCoverageCode());
-            putIfNotNull(values, "UQ", dto.getCmsLowIncomeCostSharingLicsLevel());
-            putIfNotNull(values, "U1", dto.getContractNumber());
-            putIfNotNull(values, "FF", dto.getFormularyId());
-            putIfNotNull(values, "U6", dto.getBenefitId());
-            putIfNotNull(values, "US", dto.getNextMedicarePartDEffectiveDate());
-            putIfNotNull(values, "UT", dto.getNextMedicarePartDTerminationDate());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

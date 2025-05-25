@@ -61,6 +61,20 @@ public class ResponseClaim extends SegmentBase {
             FIELD_SETTERS.put("N4", ResponseClaimDTO::setMedicadeIcn);
         }
 
+        private static final java.util.Map<String, java.util.function.Function<ResponseClaimDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new java.util.HashMap<>();
+            FIELD_GETTERS.put("EM", ResponseClaimDTO::getPrescriptionReferenceNumberQualifier);
+            FIELD_GETTERS.put("D2", ResponseClaimDTO::getPrescriptionReferenceNumber);
+            FIELD_GETTERS.put("9F", ResponseClaimDTO::getPreferredProductCount);
+            FIELD_GETTERS.put("AP", ResponseClaimDTO::getPreferredProductIdQualifier);
+            FIELD_GETTERS.put("AR", ResponseClaimDTO::getPreferredProductId);
+            FIELD_GETTERS.put("AS", ResponseClaimDTO::getPreferredProductIncentive);
+            FIELD_GETTERS.put("AT", ResponseClaimDTO::getPreferredProductCostShareIncentive);
+            FIELD_GETTERS.put("AU", ResponseClaimDTO::getPreferredProductDescription);
+            FIELD_GETTERS.put("N4", ResponseClaimDTO::getMedicadeIcn);
+        }
+
         public void updateResponseClaimDTOFromMap(Map<String, Object> values, ResponseClaimDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<ResponseClaimDTO, String> setter = FIELD_SETTERS.get(key);
@@ -72,15 +86,12 @@ public class ResponseClaim extends SegmentBase {
 
         public void updateMapFromResponseClaimDTO(ResponseClaimDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "EM", dto.getPrescriptionReferenceNumberQualifier());
-            putIfNotNull(values, "D2", dto.getPrescriptionReferenceNumber());
-            putIfNotNull(values, "9F", dto.getPreferredProductCount());
-            putIfNotNull(values, "AP", dto.getPreferredProductIdQualifier());
-            putIfNotNull(values, "AR", dto.getPreferredProductId());
-            putIfNotNull(values, "AS", dto.getPreferredProductIncentive());
-            putIfNotNull(values, "AT", dto.getPreferredProductCostShareIncentive());
-            putIfNotNull(values, "AU", dto.getPreferredProductDescription());
-            putIfNotNull(values, "N4", dto.getMedicadeIcn());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
         
     }

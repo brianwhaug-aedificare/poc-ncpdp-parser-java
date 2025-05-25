@@ -131,6 +131,54 @@ public class ResponsePricing extends SegmentBase {
             Map.entry("U9", ResponsePricingDTO::setDispensingFeeContractedReimbursableAmount)
         );
 
+        private static final Map<String, java.util.function.Function<ResponsePricingDTO, Object>> FIELD_GETTERS = Map.ofEntries(
+            Map.entry("F5", ResponsePricingDTO::getGrossAmountDue),
+            Map.entry("F6", ResponsePricingDTO::getIngredientCostPaid),
+            Map.entry("F7", ResponsePricingDTO::getDispensingFeePaid),
+            Map.entry("AV", ResponsePricingDTO::getTaxExemptIndicator),
+            Map.entry("AW", ResponsePricingDTO::getFlatSalesTaxAmountPaid),
+            Map.entry("AX", ResponsePricingDTO::getPercentageSalesTaxAmountPaid),
+            Map.entry("AY", ResponsePricingDTO::getPercentageSalesTaxRatePaid),
+            Map.entry("AZ", ResponsePricingDTO::getPercentageSalesTaxBasisPaid),
+            Map.entry("FL", ResponsePricingDTO::getIncentiveAmountPaid),
+            Map.entry("J1", ResponsePricingDTO::getProfessionalServiceFeePaid),
+            Map.entry("J2", ResponsePricingDTO::getOtherAmountPaidCount),
+            Map.entry("J3", ResponsePricingDTO::getOtherAmountPaidQualifier),
+            Map.entry("J4", ResponsePricingDTO::getOtherAmountPaid),
+            Map.entry("J5", ResponsePricingDTO::getOtherPayerAmountRecognized),
+            Map.entry("F9", ResponsePricingDTO::getTotalAmountPaid),
+            Map.entry("FM", ResponsePricingDTO::getBasisOfReimbursementDetermination),
+            Map.entry("FN", ResponsePricingDTO::getAmountAttributedToSalesTax),
+            Map.entry("FC", ResponsePricingDTO::getAccumulatedDeductibleAmount),
+            Map.entry("FD", ResponsePricingDTO::getRemainingDeductibleAmount),
+            Map.entry("FE", ResponsePricingDTO::getRemainingBenefitAmount),
+            Map.entry("FH", ResponsePricingDTO::getAmountAppliedToPeriodicDeductible),
+            Map.entry("FI", ResponsePricingDTO::getAmountOfCopay),
+            Map.entry("FK", ResponsePricingDTO::getAmountExceedingPeriodicBenefitMaximum),
+            Map.entry("HH", ResponsePricingDTO::getBasisOfCalculationDispensingFee),
+            Map.entry("HJ", ResponsePricingDTO::getBasisOfCalculationCopay),
+            Map.entry("HK", ResponsePricingDTO::getBasisOfCalculationFlatSalesTax),
+            Map.entry("HM", ResponsePricingDTO::getBasisOfCalculationPercentageSalesTax),
+            Map.entry("NZ", ResponsePricingDTO::getAmountAttributedToProcessorFee),
+            Map.entry("EQ", ResponsePricingDTO::getPatientSalesTaxAmount),
+            Map.entry("2Y", ResponsePricingDTO::getPlanSalesTaxAmount),
+            Map.entry("4U", ResponsePricingDTO::getAmountOfCoinsurance),
+            Map.entry("4V", ResponsePricingDTO::getBasisOfCalculationCoinsurance),
+            Map.entry("MU", ResponsePricingDTO::getBenefitStageCount),
+            Map.entry("MV", ResponsePricingDTO::getBenefitStageQualifier),
+            Map.entry("MW", ResponsePricingDTO::getBenefitStageAmount),
+            Map.entry("G3", ResponsePricingDTO::getEstimatedGenericSavings),
+            Map.entry("UC", ResponsePricingDTO::getSpendingAccountAmountRemaining),
+            Map.entry("UD", ResponsePricingDTO::getHealthPlanFundedAssistanceAmount),
+            Map.entry("UJ", ResponsePricingDTO::getAmountAttributedToProviderNetworkSelection),
+            Map.entry("UK", ResponsePricingDTO::getAmountAttributedToProductSelectionBrandDrug),
+            Map.entry("UM", ResponsePricingDTO::getAmountAttributedToProductSelectionNonPreferredFormularySelection),
+            Map.entry("UN", ResponsePricingDTO::getAmountAttributedToProductSelectionBrandNonPreferredFormularySelection),
+            Map.entry("UP", ResponsePricingDTO::getAmountAttributedToCoverageGap),
+            Map.entry("U8", ResponsePricingDTO::getIngredientCostContractedReimbursableAmount),
+            Map.entry("U9", ResponsePricingDTO::getDispensingFeeContractedReimbursableAmount)
+        );
+
         public void updateResponsePricingDTOFromMap(Map<String, Object> values, ResponsePricingDTO dto) {
             values.forEach((key, value) -> {
                 java.util.function.BiConsumer<ResponsePricingDTO, String> setter = FIELD_SETTERS.get(key);
@@ -142,51 +190,12 @@ public class ResponsePricing extends SegmentBase {
 
         public void updateMapFromResponsePricingDTO(ResponsePricingDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "F5", dto.getGrossAmountDue());
-            putIfNotNull(values, "F6", dto.getIngredientCostPaid());
-            putIfNotNull(values, "F7", dto.getDispensingFeePaid());
-            putIfNotNull(values, "AV", dto.getTaxExemptIndicator());
-            putIfNotNull(values, "AW", dto.getFlatSalesTaxAmountPaid());
-            putIfNotNull(values, "AX", dto.getPercentageSalesTaxAmountPaid());
-            putIfNotNull(values, "AY", dto.getPercentageSalesTaxRatePaid());
-            putIfNotNull(values, "AZ", dto.getPercentageSalesTaxBasisPaid());
-            putIfNotNull(values, "FL", dto.getIncentiveAmountPaid());
-            putIfNotNull(values, "J1", dto.getProfessionalServiceFeePaid());
-            putIfNotNull(values, "J2", dto.getOtherAmountPaidCount());
-            putIfNotNull(values, "J3", dto.getOtherAmountPaidQualifier());
-            putIfNotNull(values, "J4", dto.getOtherAmountPaid());
-            putIfNotNull(values, "J5", dto.getOtherPayerAmountRecognized());
-            putIfNotNull(values, "F9", dto.getTotalAmountPaid());
-            putIfNotNull(values, "FM", dto.getBasisOfReimbursementDetermination());
-            putIfNotNull(values, "FN", dto.getAmountAttributedToSalesTax());
-            putIfNotNull(values, "FC", dto.getAccumulatedDeductibleAmount());
-            putIfNotNull(values, "FD", dto.getRemainingDeductibleAmount());
-            putIfNotNull(values, "FE", dto.getRemainingBenefitAmount());
-            putIfNotNull(values, "FH", dto.getAmountAppliedToPeriodicDeductible());
-            putIfNotNull(values, "FI", dto.getAmountOfCopay());
-            putIfNotNull(values, "FK", dto.getAmountExceedingPeriodicBenefitMaximum());
-            putIfNotNull(values, "HH", dto.getBasisOfCalculationDispensingFee());
-            putIfNotNull(values, "HJ", dto.getBasisOfCalculationCopay());
-            putIfNotNull(values, "HK", dto.getBasisOfCalculationFlatSalesTax());
-            putIfNotNull(values, "HM", dto.getBasisOfCalculationPercentageSalesTax());
-            putIfNotNull(values, "NZ", dto.getAmountAttributedToProcessorFee());
-            putIfNotNull(values, "EQ", dto.getPatientSalesTaxAmount());
-            putIfNotNull(values, "2Y", dto.getPlanSalesTaxAmount());
-            putIfNotNull(values, "4U", dto.getAmountOfCoinsurance());
-            putIfNotNull(values, "4V", dto.getBasisOfCalculationCoinsurance());
-            putIfNotNull(values, "MU", dto.getBenefitStageCount());
-            putIfNotNull(values, "MV", dto.getBenefitStageQualifier());
-            putIfNotNull(values, "MW", dto.getBenefitStageAmount());
-            putIfNotNull(values, "G3", dto.getEstimatedGenericSavings());
-            putIfNotNull(values, "UC", dto.getSpendingAccountAmountRemaining());
-            putIfNotNull(values, "UD", dto.getHealthPlanFundedAssistanceAmount());
-            putIfNotNull(values, "UJ", dto.getAmountAttributedToProviderNetworkSelection());
-            putIfNotNull(values, "UK", dto.getAmountAttributedToProductSelectionBrandDrug());
-            putIfNotNull(values, "UM", dto.getAmountAttributedToProductSelectionNonPreferredFormularySelection());
-            putIfNotNull(values, "UN", dto.getAmountAttributedToProductSelectionBrandNonPreferredFormularySelection());
-            putIfNotNull(values, "UP", dto.getAmountAttributedToCoverageGap());
-            putIfNotNull(values, "U8", dto.getIngredientCostContractedReimbursableAmount());
-            putIfNotNull(values, "U9", dto.getDispensingFeeContractedReimbursableAmount());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }

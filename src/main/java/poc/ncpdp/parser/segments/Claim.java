@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java .util.function.Function;
 
 import poc.ncpdp.data.segments.ClaimDTO;
 
@@ -129,6 +130,53 @@ public class Claim extends SegmentBase {
             FIELD_SETTERS.put("U7", (dto, v) -> dto.setPharmacyServiceType(v));
         }
 
+        private static final Map<String, Function<ClaimDTO, Object>> FIELD_GETTERS;
+        static {
+            FIELD_GETTERS = new LinkedHashMap<>();
+            FIELD_GETTERS.put("EM", ClaimDTO::getPrescriptionReferenceNumberQualifier);
+            FIELD_GETTERS.put("D2", ClaimDTO::getPrescriptionReferenceNumber);
+            FIELD_GETTERS.put("E1", ClaimDTO::getProductServiceIdQualifier);
+            FIELD_GETTERS.put("D7", ClaimDTO::getProductServiceId);
+            FIELD_GETTERS.put("EN", ClaimDTO::getAssociatedPrescriptionReferenceNumber);
+            FIELD_GETTERS.put("EP", ClaimDTO::getAssociatedPrescriptionDate);
+            FIELD_GETTERS.put("SE", ClaimDTO::getProcedureModifierCodeCount);
+            FIELD_GETTERS.put("ER", ClaimDTO::getProcedureModifierCode);
+            FIELD_GETTERS.put("E7", ClaimDTO::getQuantityDispensed);
+            FIELD_GETTERS.put("D3", ClaimDTO::getFillNumber);
+            FIELD_GETTERS.put("D5", ClaimDTO::getDaysSupply);
+            FIELD_GETTERS.put("D6", ClaimDTO::getCompoundCode);
+            FIELD_GETTERS.put("D8", ClaimDTO::getDispenseAsWrittenProductSelectionCode);
+            FIELD_GETTERS.put("DE", ClaimDTO::getDatePrescriptionWritten);
+            FIELD_GETTERS.put("DF", ClaimDTO::getNumberOfRefillsAuthorized);
+            FIELD_GETTERS.put("DJ", ClaimDTO::getPrescriptionOriginCode);
+            FIELD_GETTERS.put("NX", ClaimDTO::getSubmissionClarificationCodeCount);
+            FIELD_GETTERS.put("DK", ClaimDTO::getSubmissionClarificationCode);
+            FIELD_GETTERS.put("ET", ClaimDTO::getQuantityPrescribed);
+            FIELD_GETTERS.put("C8", ClaimDTO::getOtherCoverageCode);
+            FIELD_GETTERS.put("DT", ClaimDTO::getSpecialPackagingIndicator);
+            FIELD_GETTERS.put("EJ", ClaimDTO::getOriginallyPrescribedIdQualifier);
+            FIELD_GETTERS.put("EA", ClaimDTO::getOriginallyPrescribedCode);
+            FIELD_GETTERS.put("EB", ClaimDTO::getOriginallyPrescribedQuantity);
+            FIELD_GETTERS.put("CW", ClaimDTO::getAlternateId);
+            FIELD_GETTERS.put("EK", ClaimDTO::getScheduledPrescriptionIdNumber);
+            FIELD_GETTERS.put("28", ClaimDTO::getUnitOfMeasure);
+            FIELD_GETTERS.put("DI", ClaimDTO::getLevelOfService);
+            FIELD_GETTERS.put("EU", ClaimDTO::getPriorAuthorizationTypeCode);
+            FIELD_GETTERS.put("EV", ClaimDTO::getPriorAuthorizationNumberSubmitted);
+            FIELD_GETTERS.put("EW", ClaimDTO::getIntermediaryAuthorizationTypeId);
+            FIELD_GETTERS.put("EX", ClaimDTO::getIntermediaryAuthorizationId);
+            FIELD_GETTERS.put("HD", ClaimDTO::getDispensingStatus);
+            FIELD_GETTERS.put("HF", ClaimDTO::getQuantityIntendedToBeDispensed);
+            FIELD_GETTERS.put("HG", ClaimDTO::getDaysSupplyIntendedToBeDispensed);
+            FIELD_GETTERS.put("NV", ClaimDTO::getDelayReasonCode);
+            FIELD_GETTERS.put("K5", ClaimDTO::getTransactionReferenceNumber);
+            FIELD_GETTERS.put("MT", ClaimDTO::getPatientAssignmentIndicator);
+            FIELD_GETTERS.put("E2", ClaimDTO::getRouteOfAdministration);
+            FIELD_GETTERS.put("G1", ClaimDTO::getCompoundType);
+            FIELD_GETTERS.put("N4", ClaimDTO::getMedicadeIcn);
+            FIELD_GETTERS.put("U7", ClaimDTO::getPharmacyServiceType);
+        }
+
         public void updateClaimDTOFromMap(Map<String, Object> values, ClaimDTO dto) {
             values.forEach((key, value) -> {
                 BiConsumer<ClaimDTO, String> setter = FIELD_SETTERS.get(key);
@@ -140,48 +188,12 @@ public class Claim extends SegmentBase {
 
         public void updateMapFromClaimDTO(ClaimDTO dto, Map<String, Object> values) {
             SegmentBase.setSegmentIdentification(values, dto.getSegmentIdentification());
-            putIfNotNull(values, "EM", dto.getPrescriptionReferenceNumberQualifier());
-            putIfNotNull(values, "D2", dto.getPrescriptionReferenceNumber());
-            putIfNotNull(values, "E1", dto.getProductServiceIdQualifier());
-            putIfNotNull(values, "D7", dto.getProductServiceId());
-            putIfNotNull(values, "EN", dto.getAssociatedPrescriptionReferenceNumber());
-            putIfNotNull(values, "EP", dto.getAssociatedPrescriptionDate());
-            putIfNotNull(values, "SE", dto.getProcedureModifierCodeCount());
-            putIfNotNull(values, "ER", dto.getProcedureModifierCode());
-            putIfNotNull(values, "E7", dto.getQuantityDispensed());
-            putIfNotNull(values, "D3", dto.getFillNumber());
-            putIfNotNull(values, "D5", dto.getDaysSupply());
-            putIfNotNull(values, "D6", dto.getCompoundCode());
-            putIfNotNull(values, "D8", dto.getDispenseAsWrittenProductSelectionCode());
-            putIfNotNull(values, "DE", dto.getDatePrescriptionWritten());
-            putIfNotNull(values, "DF", dto.getNumberOfRefillsAuthorized());
-            putIfNotNull(values, "DJ", dto.getPrescriptionOriginCode());
-            putIfNotNull(values, "NX", dto.getSubmissionClarificationCodeCount());
-            putIfNotNull(values, "DK", dto.getSubmissionClarificationCode());
-            putIfNotNull(values, "ET", dto.getQuantityPrescribed());
-            putIfNotNull(values, "C8", dto.getOtherCoverageCode());
-            putIfNotNull(values, "DT", dto.getSpecialPackagingIndicator());
-            putIfNotNull(values, "EJ", dto.getOriginallyPrescribedIdQualifier());
-            putIfNotNull(values, "EA", dto.getOriginallyPrescribedCode());
-            putIfNotNull(values, "EB", dto.getOriginallyPrescribedQuantity());
-            putIfNotNull(values, "CW", dto.getAlternateId());
-            putIfNotNull(values, "EK", dto.getScheduledPrescriptionIdNumber());
-            putIfNotNull(values, "28", dto.getUnitOfMeasure());
-            putIfNotNull(values, "DI", dto.getLevelOfService());
-            putIfNotNull(values, "EU", dto.getPriorAuthorizationTypeCode());
-            putIfNotNull(values, "EV", dto.getPriorAuthorizationNumberSubmitted());
-            putIfNotNull(values, "EW", dto.getIntermediaryAuthorizationTypeId());
-            putIfNotNull(values, "EX", dto.getIntermediaryAuthorizationId());
-            putIfNotNull(values, "HD", dto.getDispensingStatus());
-            putIfNotNull(values, "HF", dto.getQuantityIntendedToBeDispensed());
-            putIfNotNull(values, "HG", dto.getDaysSupplyIntendedToBeDispensed());
-            putIfNotNull(values, "NV", dto.getDelayReasonCode());
-            putIfNotNull(values, "K5", dto.getTransactionReferenceNumber());
-            putIfNotNull(values, "MT", dto.getPatientAssignmentIndicator());
-            putIfNotNull(values, "E2", dto.getRouteOfAdministration());
-            putIfNotNull(values, "G1", dto.getCompoundType());
-            putIfNotNull(values, "N4", dto.getMedicadeIcn());
-            putIfNotNull(values, "U7", dto.getPharmacyServiceType());
+            FIELD_GETTERS.forEach((key, getter) -> {
+                Object value = getter.apply(dto);
+                if (value != null) {
+                    values.put(key, value);
+                }
+            });
         }
     }
 }
