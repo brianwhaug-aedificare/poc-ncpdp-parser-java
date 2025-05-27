@@ -1,8 +1,12 @@
 # poc-ncpdp-parser-java
 
 This project is a Java 21 application managed with Gradle.
+Project utilizes dependencies:
+- MapStruct - ```implementation 'org.mapstruct:mapstruct:1.5.5.Final'```
+- Lombok - ```compileOnly 'org.projectlombok:lombok:1.18.30'```
 
 ## Purpose
+This is a POC and should be treated as such!
 
 The purpose of this project is to implement a NCPDP Telecommunication Standard (NCPDP) parser.
 The parser should be able to read and parse NCPDP files, extract relevant data, and provide methods to access the parsed information.
