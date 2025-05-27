@@ -77,4 +77,13 @@ public class SegmentRegistry {
     public static Class<? extends SegmentBase> segmentIdToKlass(String identifier) {
         return segmentIdToKlass.get(identifier);
     }
+
+    public static String segmentIdByKlass(Class<? extends SegmentBase> klass) {
+        for (Map.Entry<String, Class<? extends SegmentBase>> entry : segmentIdToKlass.entrySet()) {
+            if (entry.getValue().equals(klass)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 }
