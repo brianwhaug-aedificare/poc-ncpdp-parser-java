@@ -9,7 +9,7 @@ import poc.ncpdp.data.transmissions.TransactionGroupDTO;
 import poc.ncpdp.data.transmissions.TransmissionGroupDTO;
 import poc.ncpdp.parser.Constants;
 import poc.ncpdp.parser.segments.SegmentDTOBuilder;
-import poc.ncpdp.parser.segments.SegmentDTOBuilderFactory;
+import poc.ncpdp.parser.segments.SegmentRegistry;
 import poc.ncpdp.parser.segments.concerns.SegmentBuilder;
 import poc.ncpdp.parser.transmissions.RequestHeader;
 import poc.ncpdp.parser.transmissions.ResponseHeader;
@@ -56,7 +56,7 @@ public interface Builder {
         StringBuilder sb = new StringBuilder();
         for (var transmissiongSegmentDTO : transmissionGroup.getSegments()) {
             // Find the correct builder for the segment type
-            SegmentDTOBuilder builder = SegmentDTOBuilderFactory.getBuilder(transmissiongSegmentDTO);
+            SegmentDTOBuilder builder = SegmentRegistry.getBuilder(transmissiongSegmentDTO);
             if (builder != null) {
                 // populates the Domain object with the DTO values
                 Map<String, Object> values = builder.getDTOValues();
@@ -78,7 +78,7 @@ public interface Builder {
             sb.append(Constants.SEGMENT_SEPARATOR);
             for (var transactionSegmentDTO : transactionGroup.getSegments()) {
                 // Find the correct builder for the segment type
-                SegmentDTOBuilder builder = SegmentDTOBuilderFactory.getBuilder(transactionSegmentDTO);
+                SegmentDTOBuilder builder = SegmentRegistry.getBuilder(transactionSegmentDTO);
                 if (builder != null) {
                     // populates the Domain object with the DTO values
                     Map<String, Object> values = builder.getDTOValues();

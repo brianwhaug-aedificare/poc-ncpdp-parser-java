@@ -54,22 +54,12 @@ public abstract class SegmentBase implements SegmentDTOBuilder {
             givenIdentifier = parsedFields.get(SEGMENT_IDENTIFICATION);
         }
 
-        Class<? extends SegmentBase> segmentKlass = SegmentRegistry.segmentIdToKlass(givenIdentifier);
-        if (segmentKlass != null) {
-            try {
-                // Just create a new instance and use merge instead of trying to use constructor
-                // directly
-                SegmentBase instance = segmentKlass.getDeclaredConstructor().newInstance();
-                instance.merge(parsedFields);
-                return instance;
-            } catch (ReflectiveOperationException e) {
-                // More specific exception handling
-                System.err.println("Failed to create instance of " + segmentKlass.getName() + ": " + e.getMessage());
-                throw new RuntimeException(
-                        "Failed to create instance of: " + segmentKlass.getName() + ": " + e.getMessage());
-            }
-        } else {
+        SegmentBase segment = SegmentRegistry.getSegment(givenIdentifier);
+        if (segment == null) {
             throw new RuntimeException("No segment class found for identifier: " + givenIdentifier);
+        } else {
+            segment.merge(parsedFields);
+            return segment;
         }
     }
 

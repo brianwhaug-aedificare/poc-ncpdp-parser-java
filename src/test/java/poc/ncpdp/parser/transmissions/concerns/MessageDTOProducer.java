@@ -47,7 +47,7 @@ public class MessageDTOProducer {
         // Create a TransmissionGroup object
         List<SegmentDTO> segments = new ArrayList<>();
         PatientDTO patientDTO = new PatientDTO();
-        patientDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Patient.class));
+        patientDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_PATIENT);
         patientDTO.setPatientIdQualifier("1");
         patientDTO.setPatientId("123456");
         patientDTO.setDateOfBirth("19800101");
@@ -68,7 +68,7 @@ public class MessageDTOProducer {
         segments.add(patientDTO);
 
         InsuranceDTO insuranceDTO = new InsuranceDTO();
-        insuranceDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Insurance.class));
+        insuranceDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_INSURANCE);
         insuranceDTO.setCardholderId("123456");
         insuranceDTO.setCardholderFirstName("Jane");
         insuranceDTO.setCardholderLastName("Doe");
@@ -119,12 +119,12 @@ public class MessageDTOProducer {
         List<SegmentDTO> transactionSegments = new ArrayList<>();
 
         PharmacyProviderDTO pharmacyProviderDTO = new PharmacyProviderDTO();
-        pharmacyProviderDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(PharmacyProvider.class));
+        pharmacyProviderDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_PHARMACY_PROVIDER);
         pharmacyProviderDTO.setProviderIdQualifier("01");
         pharmacyProviderDTO.setProviderId("9876543210");
         
         PrescriberDTO prescriberDTO = new PrescriberDTO();
-        prescriberDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Prescriber.class));
+        prescriberDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_PRESCRIBER);
         prescriberDTO.setPrescriberIdQualifier("02");
         prescriberDTO.setPrescriberId("1122334455");
         prescriberDTO.setPrescriberLastName("Smith");
@@ -132,7 +132,7 @@ public class MessageDTOProducer {
         prescriberDTO.setPrescriberPhoneNumber("5551122334");
         
         CoordOfBenefitsDTO coordOfBenefitsDTO = new CoordOfBenefitsDTO();
-        coordOfBenefitsDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(CoordOfBenefits.class));
+        coordOfBenefitsDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_COORD_OF_BENEFITS);
         coordOfBenefitsDTO.setOtherPayerIdQualifier("02");
         coordOfBenefitsDTO.setOtherPayerId("OPID123");
         coordOfBenefitsDTO.setOtherPayerDate("20240527");
@@ -144,7 +144,7 @@ public class MessageDTOProducer {
         coordOfBenefitsDTO.setOtherPayerCoverageType("A");
         
         WorkersCompDTO workersCompDTO = new WorkersCompDTO();
-        workersCompDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(WorkersComp.class));
+        workersCompDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_WORKERS_COMP);
         workersCompDTO.setDateOfInjury("20231212");
         workersCompDTO.setEmployerName("Test Employer");
         workersCompDTO.setEmployerStreetAddress("789 Employer Rd");
@@ -167,7 +167,7 @@ public class MessageDTOProducer {
         workersCompDTO.setGenericEquivalentProductId("GENPRODID");
         
         ClaimDTO claimDTO = new ClaimDTO();
-        claimDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Claim.class));
+        claimDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_CLAIM);
         claimDTO.setPrescriptionReferenceNumberQualifier("10");
         claimDTO.setPrescriptionReferenceNumber("RX123456");
         claimDTO.setProductServiceIdQualifier("11");
@@ -212,7 +212,7 @@ public class MessageDTOProducer {
         claimDTO.setPharmacyServiceType("23");
 
         DurPpsDTO durPpsDTO = new DurPpsDTO();
-        durPpsDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(DurPps.class));
+        durPpsDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_DUR_PPS);
         durPpsDTO.setDurPpsCodeCounter("1");
         durPpsDTO.setReasonForServiceCode("A");
         durPpsDTO.setProfessionalServiceCode("B");
@@ -222,13 +222,13 @@ public class MessageDTOProducer {
         durPpsDTO.setDurCoAgentId("F");
         
         CouponDTO couponDTO = new CouponDTO();
-        couponDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Coupon.class));
+        couponDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_COUPON);
         couponDTO.setCouponType("A");
         couponDTO.setCouponNumber("COUP123");
         couponDTO.setCouponValueAmount("5000");
 
         CompoundDTO compoundDTO = new CompoundDTO();
-        compoundDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Compound.class));
+        compoundDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_COMPOUND);
         compoundDTO.setCompoundDosageFormDescriptionCode("A");
         compoundDTO.setCompoundDispensingUnitFormIndicator("1");
         compoundDTO.setCompoundIngredientComponentCount("3");
@@ -241,7 +241,7 @@ public class MessageDTOProducer {
         compoundDTO.setCompoundIngredientModifierCode("MOD123");
         
         PricingDTO pricingDTO = new PricingDTO();
-        pricingDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Pricing.class));
+        pricingDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_PRICING);
         pricingDTO.setIngredientCostSubmitted("1000");
         pricingDTO.setDispensingFeeSubmitted("5000");
         pricingDTO.setPatientPaidAmountSubmitted("1ØØ{");
@@ -254,7 +254,7 @@ public class MessageDTOProducer {
         pricingDTO.setBasisOfCostDetermination("G");
 
         PriorAuthDTO priorAuthDTO = new PriorAuthDTO();
-        priorAuthDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(PriorAuth.class));
+        priorAuthDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_PRIOR_AUTH);
         priorAuthDTO.setPriorAuthorizationProcessedDate("20231001");
         priorAuthDTO.setPriorAuthorizationEffectiveDate("20231002");
         priorAuthDTO.setPriorAuthorizationExpirationDate("20231031");
@@ -265,7 +265,7 @@ public class MessageDTOProducer {
         priorAuthDTO.setPriorAuthorizationNumberAssigned("PA123456");
 
         ClinicalDTO clinicalDTO = new ClinicalDTO();
-        clinicalDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Clinical.class));
+        clinicalDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_CLINICAL);
         clinicalDTO.setDiagnosisCodeCount("1");
         clinicalDTO.setDiagnosisCodeQualifier("A");
         clinicalDTO.setDiagnosisCode("D123");
@@ -277,7 +277,7 @@ public class MessageDTOProducer {
         clinicalDTO.setMeasurementValue("100.00");
         
         AdditionalDocumentationDTO additionalDocumentationDTO = new AdditionalDocumentationDTO();
-        additionalDocumentationDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(AdditionalDocumentation.class));
+        additionalDocumentationDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_ADDITIONAL_DOCUMENTATION);
         additionalDocumentationDTO.setAdditionalDocumentationTypeId("AD123");
         additionalDocumentationDTO.setRequestPeriodBeginDate("20240501");
         additionalDocumentationDTO.setRequestPeriodRecertRevisedDate("20240515");
@@ -295,7 +295,7 @@ public class MessageDTOProducer {
         additionalDocumentationDTO.setQuestionAlphanumericResponse("Response123");
 
         FacilityDTO facilityDTO = new FacilityDTO();
-        facilityDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Facility.class));
+        facilityDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_FACILITY);
         facilityDTO.setFacilityId("FAC123");
         facilityDTO.setFacilityName("Test Facility");
         facilityDTO.setFacilityStreetAddress("456 Facility Ave");
@@ -304,7 +304,7 @@ public class MessageDTOProducer {
         facilityDTO.setFacilityZipPostalZone("75001");
             
         NarrativeDTO narrativeDTO = new NarrativeDTO();
-        narrativeDTO.setSegmentIdentification(SegmentRegistry.segmentIdByKlass(Narrative.class));
+        narrativeDTO.setSegmentIdentification(SegmentRegistry.SEGMENT_NARRATIVE);
         narrativeDTO.setNarrativeMessage("This is a test narrative for the NCPDP parser.");
 
         transactionSegments.add(pharmacyProviderDTO);
@@ -332,4 +332,3 @@ public class MessageDTOProducer {
         return request;
     }
 }
-        

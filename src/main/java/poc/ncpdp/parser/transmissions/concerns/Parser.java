@@ -41,6 +41,24 @@ public interface Parser {
                 result.transactionGroups(), new ArrayList<>());
     }
 
+    /**
+     * Parses a request transmission string into a RequestHeader.
+     * For highest performance, this method should be used
+     * when only the header is needed without parsing the entire transmission.
+     */
+    static RequestHeader parseRequestHeader(String rawString) {
+        return new RequestHeader(rawString);
+    }
+    
+    /**
+     * Parses a response transmission string into a ResponseHeader.
+     * For highest performance, this method should be used
+     * when only the header is needed without parsing the entire transmission.
+     */
+    static ResponseHeader parseResponseHeader(String rawString) {
+        return new ResponseHeader(rawString);
+    }
+
     static RequestDTO parseRequestIntoDTO(String rawString) {
         RequestHeader header = new RequestHeader(rawString);
         ParseResult result = parseTransmission(rawString, header.getHeaderLength());

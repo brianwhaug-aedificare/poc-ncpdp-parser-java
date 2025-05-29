@@ -71,19 +71,4 @@ public class GroupBase {
             return Map.of("segments", segments.stream().map(SegmentBase::getHash).collect(Collectors.toList()));
         }
     }
-
-    public SegmentBase getSegment(Class<? extends SegmentBase> segmentKlass) {
-        for (SegmentBase s : segments) {
-            if (segmentKlass.isInstance(s)) {
-                return s;
-            }
-        }
-        try {
-            SegmentBase segment = segmentKlass.getConstructor().newInstance();
-            segments.add(segment);
-            return segment;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
