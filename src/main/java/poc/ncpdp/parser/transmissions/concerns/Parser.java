@@ -14,8 +14,10 @@ import poc.ncpdp.parser.Constants;
 import poc.ncpdp.parser.segments.SegmentBase;
 import poc.ncpdp.parser.transmissions.Request;
 import poc.ncpdp.parser.transmissions.RequestHeader;
+import poc.ncpdp.parser.transmissions.RequestHeaderSchema;
 import poc.ncpdp.parser.transmissions.Response;
 import poc.ncpdp.parser.transmissions.ResponseHeader;
+import poc.ncpdp.parser.transmissions.ResponseHeaderSchema;
 import poc.ncpdp.parser.transmissions.groups.TransmissionGroup;
 import poc.ncpdp.parser.transmissions.groups.TransactionGroup;
 import poc.ncpdp.parser.transmissions.groups.GroupBase;
@@ -26,7 +28,7 @@ public interface Parser {
      */
     static Request parseRequest(String rawString) {
         RequestHeader header = new RequestHeader(rawString);
-        ParseResult result = parseTransmission(rawString, header.getHeaderLength());
+        ParseResult result = parseTransmission(rawString, RequestHeaderSchema.getHeaderLength());
         return new Request(header, result.transmissionGroup(),
                 result.transactionGroups(), new ArrayList<>());
     }
@@ -36,7 +38,7 @@ public interface Parser {
      */
     static Response parseResponse(String rawString) {
         ResponseHeader header = new ResponseHeader(rawString);
-        ParseResult result = parseTransmission(rawString, header.getHeaderLength());
+        ParseResult result = parseTransmission(rawString, ResponseHeaderSchema.getHeaderLength());
         return new Response(header, result.transmissionGroup(),
                 result.transactionGroups(), new ArrayList<>());
     }
@@ -61,7 +63,7 @@ public interface Parser {
 
     static RequestDTO parseRequestIntoDTO(String rawString) {
         RequestHeader header = new RequestHeader(rawString);
-        ParseResult result = parseTransmission(rawString, header.getHeaderLength());
+        ParseResult result = parseTransmission(rawString, RequestHeaderSchema.getHeaderLength());
 
         RequestHeaderDTO headerDTO = new RequestHeaderDTO(header.getBinNumber(), header.getVersion(),
                 header.getTransactionCode(),
@@ -81,7 +83,7 @@ public interface Parser {
 
     static ResponseDTO parseResponseIntoDTO(String rawString) {
         ResponseHeader header = new ResponseHeader(rawString);
-        ParseResult result = parseTransmission(rawString, header.getHeaderLength());
+        ParseResult result = parseTransmission(rawString, ResponseHeaderSchema.getHeaderLength());
         ResponseHeaderDTO headerDTO = new ResponseHeaderDTO(header.getVersion(), header.getTransactionCode(),
                 header.getTransactionCount(), header.getHeaderResponseStatus(), header.getServiceProviderIdQualifier(),
                 header.getServiceProviderId(), header.getDateOfService());

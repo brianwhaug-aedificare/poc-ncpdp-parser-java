@@ -32,7 +32,7 @@ public class Response implements Transmission, SegmentsMethods, Serializer {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(FixedWidth.toFixedWidth(header.getHeader(), ResponseHeader.getHeaderSchema()));
+        sb.append(FixedWidth.toFixedWidth(header.getHeader(), ResponseHeaderSchema.getHeaderSchema()));
         sb.append(Constants.SEGMENT_SEPARATOR);
         sb.append(transmissionGroup.toString());
         for (TransactionGroup group : transactionGroups) {

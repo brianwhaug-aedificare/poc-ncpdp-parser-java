@@ -12,7 +12,9 @@ import poc.ncpdp.parser.segments.SegmentDTOBuilder;
 import poc.ncpdp.parser.segments.SegmentRegistry;
 import poc.ncpdp.parser.segments.concerns.SegmentBuilder;
 import poc.ncpdp.parser.transmissions.RequestHeader;
+import poc.ncpdp.parser.transmissions.RequestHeaderSchema;
 import poc.ncpdp.parser.transmissions.ResponseHeader;
+import poc.ncpdp.parser.transmissions.ResponseHeaderSchema;
 import poc.ncpdp.parser.utils.FixedWidth;
 
 /**
@@ -30,7 +32,7 @@ public interface Builder {
         StringBuilder sb = new StringBuilder();
 
         RequestHeader header = new RequestHeader(request.getRequestHeader());
-        sb.append(FixedWidth.toFixedWidth(header.getHeader(), RequestHeader.getHeaderSchema()));
+        sb.append(FixedWidth.toFixedWidth(header.getHeader(), RequestHeaderSchema.getHeaderSchema()));
         sb.append(Constants.SEGMENT_SEPARATOR);
 
         sb.append(buildTransmission(request.getTransmissionGroup()));
@@ -43,7 +45,7 @@ public interface Builder {
         StringBuilder sb = new StringBuilder();
 
         ResponseHeader header = new ResponseHeader(response.getResponseHeader());
-        sb.append(FixedWidth.toFixedWidth(header.getHeader(), ResponseHeader.getHeaderSchema()));
+        sb.append(FixedWidth.toFixedWidth(header.getHeader(), ResponseHeaderSchema.getHeaderSchema()));
         sb.append(Constants.SEGMENT_SEPARATOR);
 
         sb.append(buildTransmission(response.getTransmissionGroup()));

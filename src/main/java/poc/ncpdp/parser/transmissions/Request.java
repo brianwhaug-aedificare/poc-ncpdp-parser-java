@@ -32,7 +32,7 @@ public class Request implements Transmission, SegmentsMethods, Serializer {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(FixedWidth.toFixedWidth(header.getHeader(), RequestHeader.getHeaderSchema()));
+        sb.append(FixedWidth.toFixedWidth(header.getHeader(), RequestHeaderSchema.getHeaderSchema()));
         sb.append(Constants.SEGMENT_SEPARATOR);
         sb.append(transmissionGroup.toString());
         for (TransactionGroup group : transactionGroups) {
